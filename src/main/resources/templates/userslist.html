@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Users List</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="col-md-12">
+			<div class="col-md-4"></div>
+			<div class="col-md-4"><h1>List of Users</h1></div>
+			<div class="col-md-4"></div>
+		</div>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>
+						First Name
+					</th>
+					<th>
+						Last Name
+					</th>
+					<th>
+						Email
+					</th>
+					<th>
+						Phone Number
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="curUser, start:${userList}">
+					<td th:text="${curUser.getName()}">
+					</td>
+					<td th:text="${curUser.getLastName()}">
+					</td>
+					<td th:text="${curUser.getEmail()}">
+					</td>
+					<td th:text="${curUser.getPhoneNumber()}">
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

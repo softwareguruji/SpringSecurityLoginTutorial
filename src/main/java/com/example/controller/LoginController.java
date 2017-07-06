@@ -58,6 +58,16 @@ public class LoginController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/listUser", method = RequestMethod.GET)
+	public ModelAndView listUsers(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("userList", userService.getAllUser());
+		modelAndView.setViewName("userslist");
+		return modelAndView;
+	}
+	
+	
+	
 	@RequestMapping(value="/admin/home", method = RequestMethod.GET)
 	public ModelAndView home(){
 		ModelAndView modelAndView = new ModelAndView();
