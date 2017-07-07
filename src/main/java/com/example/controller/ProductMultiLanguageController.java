@@ -7,14 +7,13 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.model.MultiLanguageProduct;
-import com.example.model.User;
 import com.example.service.ProductService;
-import com.example.service.UserService;
 
 @Controller
 public class ProductMultiLanguageController {
@@ -26,14 +25,16 @@ public class ProductMultiLanguageController {
 	public ModelAndView product(){
 		ModelAndView modelAndView = new ModelAndView();
 		MultiLanguageProduct multiLangProdObj = new MultiLanguageProduct();
-		modelAndView.addObject("multi_lang_product", multiLangProdObj);
+		//multiLangProdObj.setManifold(true);
+		modelAndView.addObject("product", multiLangProdObj);
 		modelAndView.setViewName("product_add");
 		return modelAndView;
 	}
 	
 	@RequestMapping(value = "/product", method = RequestMethod.POST)
-	public ModelAndView createNewProduct(@Valid MultiLanguageProduct productObj, BindingResult bindingResult) {
+	public ModelAndView createNewProduct(@ModelAttribute("product") @Valid MultiLanguageProduct productObj, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
+		productObj.setActive(true);
 		List<MultiLanguageProduct> productExists = productService.findProductByProductName(productObj.getProductName());
 		if (productExists != null
 				&& !productExists.isEmpty()) {

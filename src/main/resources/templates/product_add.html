@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Add New Product</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+	<div class="container">
+		<div class="row">
+			 <div class="col-md-6 col-md-offset-4">
+			 	<form autocomplete="off" action="#" th:action="@{/product}"
+					th:object="${product}" method="post" class="form-horizontal"
+					role="form">
+					<h2>Add a new product</h2>
+					<div class="form-group">
+						<div class="col-sm-9">
+							<label th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"
+									class="validation-message"></label>
+							<input type="text" th:field="*{productCategory}" placeholder="Category"
+									class="form-control" /> 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9">
+							<label th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"
+									class="validation-message"></label>
+							<input type="text" th:field="*{productName}" placeholder="Product Name"
+									class="form-control" /> 
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9" style="text-align: left;">
+							<p class="form-control">
+							<input type="checkbox" th:checked="*{manifold}"
+									/> Is it Manifold Product?
+							</p>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-9">
+							<button type="submit" class="btn btn-primary btn-block">Save Product</button>
+						</div>
+					</div>
+				</form>
+				<span th:utext="${successMessage}"></span>
+			 </div>
+		</div>		
+	</div>
+
+</body>
+</html>

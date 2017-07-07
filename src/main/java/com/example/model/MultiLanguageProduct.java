@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Entity
 @Table(name="Multi_Lang_Product")
 public class MultiLanguageProduct {
@@ -16,9 +18,11 @@ public class MultiLanguageProduct {
 	@Column(name = "PROD_ID")
 	private int productId;
 	
+	@NotEmpty(message = "Product Category must not be empty")
 	@Column(name = "PROD_CATEGORY")
 	private String productCategory;
 	
+	@NotEmpty(message = "Product Name must not be empty")
 	@Column(name = "PROD_NAME")
 	private String productName;
 	
