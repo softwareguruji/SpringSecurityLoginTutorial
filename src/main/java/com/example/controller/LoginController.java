@@ -3,6 +3,8 @@ package com.example.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -66,7 +68,12 @@ public class LoginController {
 		return modelAndView;
 	}
 	
-	
+	@RequestMapping(value="/admin/listUser", method = RequestMethod.GET)
+	public ModelAndView listUsersRest(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("admin/userslist_rest");
+		return modelAndView;
+	}
 	
 	@RequestMapping(value="/admin/home", method = RequestMethod.GET)
 	public ModelAndView home(){
@@ -78,6 +85,8 @@ public class LoginController {
 		modelAndView.setViewName("admin/home");
 		return modelAndView;
 	}
+	
+	
 	
 
 }

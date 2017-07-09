@@ -21,17 +21,17 @@ public class ProductMultiLanguageController {
 	@Autowired
 	private ProductService productService;
 	
-	@RequestMapping(value="/product", method = RequestMethod.GET)
+	@RequestMapping(value="/admin/product", method = RequestMethod.GET)
 	public ModelAndView product(){
 		ModelAndView modelAndView = new ModelAndView();
 		MultiLanguageProduct multiLangProdObj = new MultiLanguageProduct();
 		//multiLangProdObj.setManifold(true);
 		modelAndView.addObject("product", multiLangProdObj);
-		modelAndView.setViewName("product_add");
+		modelAndView.setViewName("/admin/product_add");
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/product", method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/product", method = RequestMethod.POST)
 	public ModelAndView createNewProduct(@ModelAttribute("product") @Valid MultiLanguageProduct productObj, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
 		productObj.setActive(true);
@@ -48,9 +48,16 @@ public class ProductMultiLanguageController {
 			productService.saveProduct(productObj);
 			modelAndView.addObject("successMessage", "Product has been registered successfully");
 			modelAndView.addObject("product", new MultiLanguageProduct());
-			modelAndView.setViewName("product_add");
+			modelAndView.setViewName("/admin/product_add");
 			
 		}
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/admin/listProduct", method = RequestMethod.GET)
+	public ModelAndView listProducts(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin/productlist_rest");
 		return modelAndView;
 	}
 	

@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<User> getAllUser() {
 		return userRepository.findAll();
+	}
+
+	@Override
+	public Page<User> listAllByPage(Pageable pageable) {
+		return userRepository.findAll(pageable);
 	}
 
 }
