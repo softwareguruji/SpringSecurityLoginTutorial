@@ -35,22 +35,55 @@ public class ProductMultiLanguageController {
 	public ModelAndView createNewProduct(@ModelAttribute("product") @Valid MultiLanguageProduct productObj, BindingResult bindingResult) {
 		ModelAndView modelAndView = new ModelAndView();
 		productObj.setActive(true);
+		
+		long productId = productObj.getProductId();
+		boolean isUpdateCall = false;
+		if(productId != 0){
+			isUpdateCall = true;
+		}
+		
+		System.out.println("Is Manifold ? "+productObj.isManifold());
+		
 		List<MultiLanguageProduct> productExists = productService.findProductByProductName(productObj.getProductName());
 		if (productExists != null
 				&& !productExists.isEmpty()) {
-			bindingResult
+			
+			if(isUpdateCall){
+				if(productExists.size()>0){
+					if(productExists.get(0).getProductId() != productObj.getProductId()){
+						bindingResult
+							.rejectValue("productName", "error.product",
+									"There is already a product registered with the same product name");
+					}
+				}
+			}else{
+				bindingResult
 					.rejectValue("productName", "error.product",
 							"There is already a product registered with the same product name");
+			}
 		}
+		
 		if (bindingResult.hasErrors()) {
-			modelAndView.setViewName("product_add");
+			modelAndView.setViewName("/admin/product_add");
 		} else {
 			productService.saveProduct(productObj);
-			modelAndView.addObject("successMessage", "Product has been registered successfully");
 			modelAndView.addObject("product", new MultiLanguageProduct());
-			modelAndView.setViewName("/admin/product_add");
-			
+			if(isUpdateCall){
+				modelAndView.addObject("successMessage", "Product has been updated successfully");
+			}else{
+				modelAndView.addObject("successMessage", "Product has been saved successfully");
+			}
+			modelAndView.setViewName("/admin/product_add");				
 		}
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/admin/viewUpdateProduct", method = RequestMethod.GET)
+	public ModelAndView viewUpdateProduct(@ModelAttribute("product_id") String productId){
+		ModelAndView modelAndView = new ModelAndView();
+		MultiLanguageProduct multiLangProdObj = productService.getProductById(Long.parseLong(productId));
+		modelAndView.addObject("product", multiLangProdObj);
+		modelAndView.setViewName("/admin/product_add");
 		return modelAndView;
 	}
 	

@@ -36,4 +36,14 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.findAll(pageable);
 	}
 
+	@Override
+	public MultiLanguageProduct getProductById(long productId) {
+		return productRepository.getOne(productId);
+	}
+
+	@Override
+	public void updateProduct(MultiLanguageProduct product) {
+		productRepository.save(product);
+	}
+
 }

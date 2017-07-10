@@ -20,7 +20,8 @@
 			 	<form autocomplete="off" action="#" th:action="@{/admin/product}"
 					th:object="${product}" method="post" class="form-horizontal"
 					role="form">
-					<h2>Add a new product</h2>
+					<h2 th:text="${product.productId != 0 ? 'Update product' : 'Add a new product'}"></h2>
+					<input type="hidden" th:field="*{productId}" ></input>
 					<div class="form-group">
 						<div class="col-sm-9">
 							<label th:if="${#fields.hasErrors('productCategory')}" th:errors="*{productCategory}"
@@ -40,17 +41,23 @@
 					<div class="form-group">
 						<div class="col-sm-9" style="text-align: left;">
 							<p class="form-control">
-							<input type="checkbox" th:checked="*{manifold}"
-									/> Is it Manifold Product?
+							<input type="checkbox" th:field="*{manifold}"/> Is it Manifold Product?
 							</p>
 						</div>
 					</div>
 					<div class="form-group">
 						<div class="col-sm-9">
-							<button type="submit" class="btn btn-primary btn-block">Save Product</button>
+							<button type="submit" class="btn btn-primary btn-block">
+								Save
+							</button>
 						</div>
 					</div>
 				</form>
+			 </div>
+			 <div class="col-sm-6 col-sm-offset-3">
+				<form th:action="@{/admin/listProduct}" method="get">
+					<button class="btn btn-md btn-warning btn-block" type="Submit">List of Products</button>
+				</form>	
 				<span th:utext="${successMessage}"></span>
 			 </div>
 		</div>		

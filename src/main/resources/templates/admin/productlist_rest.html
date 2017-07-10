@@ -16,16 +16,38 @@
 	  	        "aoColumns": [
 	  	            { "mData": "productCategory" },
 	  	            { "mData": "productName" },
-	  	            { "mData": function(manifold){
-	  	            	if(manifold == true){
+	  	            { "mData": function(rowData){
+	  	            	if(rowData.manifold == true){
 	  	            		return "Yes";
 	  	            	}else{
 	  	            		return "No";
 	  	            	}
-	  	            } }
+	  	            }},
+	  	            { "mData": function(rowData){
+	  	            	var a = rowData.productId;
+	  	            	var b = "<button class=\"btn btn-success btn-xs\" onclick=\"updateCallById('"+a+"')\">Edit</button> &nbsp;&nbsp;";
+	  	            	b += "<button class=\"btn btn-xs\" onclick=\"deleteCallById('"+a+"')\">Delete</button> &nbsp;&nbsp;";
+	  	            	b += "<button class=\"btn btn-xs\" onclick=\"addSegmentCallById('"+a+"')\">Add New Segment</button>";
+	  	            	return b;
+	  	            }} 
 	  	        ]
 	  	    } );
 	  	} );
+	  	
+	  	function updateCallById(productId){
+	  		//alert(productId);
+	  		document.location.href = "viewUpdateProduct?product_id="+productId;
+	  	}
+	  	
+	  	function deleteCallById(productId){
+	  		alert(productId+' This is yet in TODO task...');
+	  		//document.location.href = "deleteProduct?product_id="+productId;
+	  	}
+	  	
+	  	function addSegmentCallById(productId){
+	  		alert(productId+' This is yet in TODO task...');
+	  		//document.location.href = "deleteProduct?product_id="+productId;
+	  	}
   	</script>
 <body>
 	<div class="container-fluid">
@@ -50,6 +72,9 @@
 					<th>
 						is Manifold?
 					</th>
+					<th>
+						&nbsp;
+					</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -62,6 +87,9 @@
 					</th>
 					<th>
 						is Manifold?
+					</th>
+					<th>
+						&nbsp;
 					</th>
 				</tr>
 			</tfoot>

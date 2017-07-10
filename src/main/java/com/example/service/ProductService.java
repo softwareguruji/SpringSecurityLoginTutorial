@@ -13,4 +13,6 @@ public interface ProductService {
 	public void saveProduct(MultiLanguageProduct product);
 	public List<MultiLanguageProduct> getAllProducts();
 	public Page<MultiLanguageProduct> listAllByPage(Pageable pageable);
+	public MultiLanguageProduct getProductById(long productId);
+	public void updateProduct(MultiLanguageProduct product);
 }

@@ -16,7 +16,7 @@ public class MultiLanguageProduct {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "PROD_ID")
-	private int productId;
+	private long productId;
 	
 	@NotEmpty(message = "Product Category must not be empty")
 	@Column(name = "PROD_CATEGORY")
@@ -32,11 +32,11 @@ public class MultiLanguageProduct {
 	@Column(name = "IS_MANIFOLD")
 	private boolean manifold;
 
-	public int getProductId() {
+	public long getProductId() {
 		return productId;
 	}
 
-	public void setProductId(int productId) {
+	public void setProductId(long productId) {
 		this.productId = productId;
 	}
 
