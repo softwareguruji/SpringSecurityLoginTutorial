@@ -26,7 +26,7 @@
 	  	            { "mData": function(rowData){
 	  	            	var a = rowData.productId;
 	  	            	var b = "<button class=\"btn btn-success btn-xs\" onclick=\"updateCallById('"+a+"')\">Edit</button> &nbsp;&nbsp;";
-	  	            	b += "<button class=\"btn btn-xs\" onclick=\"deleteCallById('"+a+"')\">Delete</button> &nbsp;&nbsp;";
+	  	            	b += "<button class=\"btn btn-success btn-xs\" onclick=\"deleteCallById('"+a+"')\">Delete</button> &nbsp;&nbsp;";
 	  	            	b += "<button class=\"btn btn-xs\" onclick=\"addSegmentCallById('"+a+"')\">Add New Segment</button>";
 	  	            	return b;
 	  	            }} 
@@ -35,13 +35,14 @@
 	  	} );
 	  	
 	  	function updateCallById(productId){
-	  		//alert(productId);
 	  		document.location.href = "viewUpdateProduct?product_id="+productId;
 	  	}
 	  	
 	  	function deleteCallById(productId){
-	  		alert(productId+' This is yet in TODO task...');
-	  		//document.location.href = "deleteProduct?product_id="+productId;
+	  		var answer = confirm("Are you sure. You want to delete?");
+	  		if(answer){
+	  			document.location.href = "deleteProduct?product_id="+productId;
+	  		}
 	  	}
 	  	
 	  	function addSegmentCallById(productId){

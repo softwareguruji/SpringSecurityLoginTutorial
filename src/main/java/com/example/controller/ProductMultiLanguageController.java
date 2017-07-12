@@ -87,6 +87,15 @@ public class ProductMultiLanguageController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value = "/admin/deleteProduct", method = RequestMethod.GET)
+	public ModelAndView deleteProduct(@ModelAttribute("product_id") String productId){
+		ModelAndView modelAndView = new ModelAndView();
+		productService.deleteProduct(Long.parseLong(productId));
+		modelAndView.setViewName("/admin/productlist_rest");
+		return modelAndView;
+	}
+	
+	
 	@RequestMapping(value = "/admin/listProduct", method = RequestMethod.GET)
 	public ModelAndView listProducts(){
 		ModelAndView modelAndView = new ModelAndView();

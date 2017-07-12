@@ -15,4 +15,5 @@ public interface ProductService {
 	public Page<MultiLanguageProduct> listAllByPage(Pageable pageable);
 	public MultiLanguageProduct getProductById(long productId);
 	public void updateProduct(MultiLanguageProduct product);
+	public void deleteProduct(long productId);
 }
