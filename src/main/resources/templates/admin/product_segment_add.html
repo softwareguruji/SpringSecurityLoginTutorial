@@ -12,7 +12,8 @@
 <div class="container">
 	<h2>Add New Segment</h2>
 	<hr>
-	<div>
+	<div th:object="${product}">
+		Product Id : <p	th:field="*{productId}"/><br /><br />Ketan
 		Product Details <br /><br />
 		Product Name: xyz <br />
 		Product Category: valve <br />
@@ -20,7 +21,7 @@
 	</div>
 	<hr>
 	<div>
-		
+				
 	</div>
 </div>
 </body>

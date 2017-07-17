@@ -1,10 +1,14 @@
 package com.example.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -32,6 +36,10 @@ public class MultiLanguageProduct {
 	@Column(name = "IS_MANIFOLD")
 	private boolean manifold;
 
+	@OneToMany
+	@JoinColumn(name = "REF_PROD_ID")
+	private Set<MultiLanguageProductSegment> productSegments;
+	
 	public long getProductId() {
 		return productId;
 	}
@@ -70,6 +78,14 @@ public class MultiLanguageProduct {
 
 	public void setManifold(boolean manifold) {
 		this.manifold = manifold;
+	}
+
+	public Set<MultiLanguageProductSegment> getProductSegments() {
+		return productSegments;
+	}
+
+	public void setProductSegments(Set<MultiLanguageProductSegment> productSegments) {
+		this.productSegments = productSegments;
 	}
 	
 }

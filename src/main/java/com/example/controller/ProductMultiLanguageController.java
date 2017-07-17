@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,6 +22,8 @@ public class ProductMultiLanguageController {
 
 	@Autowired
 	private ProductService productService;
+
+	//All Product Controllers
 	
 	@RequestMapping(value="/admin/product", method = RequestMethod.GET)
 	public ModelAndView product(){
@@ -95,12 +99,25 @@ public class ProductMultiLanguageController {
 		return modelAndView;
 	}
 	
-	
 	@RequestMapping(value = "/admin/listProduct", method = RequestMethod.GET)
 	public ModelAndView listProducts(){
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin/productlist_rest");
 		return modelAndView;
 	}
+
+	//All Product Segment Controllers
 	
+	@RequestMapping(value = "/admin/viewProductSegment", method = RequestMethod.GET)
+	public ModelAndView AddListViewSegmentsByProduct(@ModelAttribute("product_id") String productId){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		MultiLanguageProduct multiLangProdObj = productService.getProductById(Long.parseLong(productId));
+		modelAndView.addObject("product", multiLangProdObj);
+
+		System.out.println(multiLangProdObj.getProductId());
+		
+		modelAndView.setViewName("/admin/product_segment_add");
+		return modelAndView;
+	}
 }
