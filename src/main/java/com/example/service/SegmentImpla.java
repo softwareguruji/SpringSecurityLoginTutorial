@@ -3,10 +3,14 @@ package com.example.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.example.model.MultiLanguageProductSegment;
 import com.example.repository.MultiLangProductSegmentRepository;
 
+@Service("segment")
 public class SegmentImpla implements SegmentService {
 
 	@Autowired
@@ -17,5 +21,14 @@ public class SegmentImpla implements SegmentService {
 		return productSegmentRepository.findAll();
 	}
 
+	@Override
+	public void save(MultiLanguageProductSegment segment) {
+		productSegmentRepository.save(segment);
+	}
+
+	@Override
+	public Page<MultiLanguageProductSegment> listAllByPage(Pageable pageable) {
+		return productSegmentRepository.findAll(pageable);
+	}
 
 }

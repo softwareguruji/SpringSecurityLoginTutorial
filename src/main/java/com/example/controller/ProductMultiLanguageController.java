@@ -1,7 +1,5 @@
 package com.example.controller;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-
 import java.util.List;
 
 import javax.validation.Valid;
@@ -15,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.model.MultiLanguageProduct;
+import com.example.model.MultiLanguageProductSegment;
 import com.example.service.ProductService;
+import com.example.service.SegmentService;
 
 @Controller
 public class ProductMultiLanguageController {
@@ -23,13 +23,15 @@ public class ProductMultiLanguageController {
 	@Autowired
 	private ProductService productService;
 
+	@Autowired
+	private SegmentService segmentService;
+	
 	//All Product Controllers
 	
 	@RequestMapping(value="/admin/product", method = RequestMethod.GET)
 	public ModelAndView product(){
 		ModelAndView modelAndView = new ModelAndView();
 		MultiLanguageProduct multiLangProdObj = new MultiLanguageProduct();
-		//multiLangProdObj.setManifold(true);
 		modelAndView.addObject("product", multiLangProdObj);
 		modelAndView.setViewName("/admin/product_add");
 		return modelAndView;
@@ -109,15 +111,42 @@ public class ProductMultiLanguageController {
 	//All Product Segment Controllers
 	
 	@RequestMapping(value = "/admin/viewProductSegment", method = RequestMethod.GET)
-	public ModelAndView AddListViewSegmentsByProduct(@ModelAttribute("product_id") String productId){
+	public ModelAndView addListViewSegmentsByProduct(@ModelAttribute("product_id") String productId){
 		ModelAndView modelAndView = new ModelAndView();
 		
 		MultiLanguageProduct multiLangProdObj = productService.getProductById(Long.parseLong(productId));
 		modelAndView.addObject("product", multiLangProdObj);
 
 		System.out.println(multiLangProdObj.getProductId());
+
+		MultiLanguageProductSegment segment = new MultiLanguageProductSegment();
+		modelAndView.addObject("segment", segment);
 		
 		modelAndView.setViewName("/admin/product_segment_add");
 		return modelAndView;
 	}
+	
+	@RequestMapping(value = "/admin/updateProductSegment", method = RequestMethod.POST)
+	public ModelAndView addSegmentsByProduct(@ModelAttribute("productId") String productId, @ModelAttribute("segment") @Valid MultiLanguageProductSegment segment){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		MultiLanguageProduct multiLangProdObj = productService.getProductById(Long.parseLong(productId));
+		modelAndView.addObject("product", multiLangProdObj);
+
+		//System.out.println(multiLangProdObj.getProductId());
+		segment.setProduct(multiLangProdObj);
+		segmentService.save(segment);
+		modelAndView.addObject("segment", segment);
+		
+		modelAndView.setViewName("/admin/product_segment_add");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value = "/admin/listProductSegments", method = RequestMethod.GET)
+	public ModelAndView listProductSegments(){
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin/productsegmentlist_rest");
+		return modelAndView;
+	}
+
 }

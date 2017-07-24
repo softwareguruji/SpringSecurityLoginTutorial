@@ -3,6 +3,7 @@ package com.example.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="Multi_Lang_Product_Segment")
@@ -35,8 +38,9 @@ public class MultiLanguageProductSegment {
 	@Column(name = "ACTIVE_STATE")
 	private boolean active;
 	
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "REF_PROD_ID")
+	@JsonIgnore
 	private MultiLanguageProduct product;
 
 	public long getSegmentId() {
