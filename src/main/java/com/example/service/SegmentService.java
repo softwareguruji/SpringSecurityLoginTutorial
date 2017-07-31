@@ -12,4 +12,5 @@ public interface SegmentService {
 	List<MultiLanguageProductSegment> getAllSegments();
 	void save(MultiLanguageProductSegment segment);
 	public Page<MultiLanguageProductSegment> listAllByPage(Pageable pageable);
+	public List<MultiLanguageProductSegment> listByProductByPage(long productId);
 }

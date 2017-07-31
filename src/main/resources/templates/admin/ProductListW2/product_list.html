@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Product / Segment / Attribute Description Language Management</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  	<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+  	<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
+
+	<script type="text/javascript" >
+	  	$(document).ready(function() {
+	  		$('#productTable').DataTable( {
+	  	        "ajax": {
+	  	        	"url": "listProductRest",
+	  	        	"dataSrc": "content"
+	  	        },
+	  	        "columns": [
+	  	            { "mData": "productCategory" },
+	  	            { "mData": "productName" },
+	  	            { "mData": function(rowData){
+	  	            	if(rowData.manifold == true){
+	  	            		return "Yes";
+	  	            	}else{
+	  	            		return "No";
+	  	            	}
+	  	            }},
+	  	            { "mData": function(rowData){
+	  	            	var a = rowData.productId;
+	  	            	var b = "<button onclick=\"updateCallById('"+a+"')\">Edit</button> &nbsp;&nbsp;";
+	  	            	b += "<button onclick=\"deleteCallById('"+a+"')\">Delete</button> &nbsp;&nbsp;";
+	  	            	b += "<button onclick=\"listSegmentCallById('"+a+"')\">List Segment</button>";
+	  	            	return b;
+	  	            }} 
+	  	        ]
+	  	    } );
+	  	} );
+	  	
+	  	function updateCallById(productId){
+	  		document.location.href = "viewUpdateProduct?product_id="+productId;
+	  	}
+	  	
+	  	function deleteCallById(productId){
+	  		var answer = confirm("Are you sure. You want to delete?");
+	  		if(answer){
+	  			document.location.href = "deleteProduct?product_id="+productId;
+	  		}
+	  	}
+	  	
+	  	function listSegmentCallById(productId){
+	  		//document.location.href = "viewProductSegment?product_id="+productId;
+	  		var dTable;
+	  		
+	  		alert('productId : '+productId);
+	  		if($.fn.DataTable.isDataTable('#productSegmentTable')){
+	  			
+	  			//var url =
+	  			alert('1');
+	  			$(dTable).dataTable().api().ajax.url('listProductSegmentsRest?productId='+productId).load();
+	  			$(dTable).dataTable().api().draw();
+	  			alert('2');
+	  			/* $('#productSegmentTable').DataTable()
+		  		   .rows().remove().draw();
+	  			
+	  			$.ajax({
+	  			  url: "listProductSegmentsRest?productId="+productId,
+	  			}).done(function(response) {
+	  				
+	  				var tr;
+	  				$.each(response, function(i, item){
+	  					//alert(item.segmentId);
+	  					var a = item.productId;
+	  	            	var b = "<button onclick=\"updateCallById('"+a+"')\">Edit</button> &nbsp;&nbsp;";
+	  	            	b += "<button onclick=\"deleteCallById('"+a+"')\">Delete</button> &nbsp;&nbsp;";
+	  	            	b += "<button onclick=\"listSegmentCallById('"+a+"')\">List Segment</button>";
+	  					
+	  					tr = $('<tr>').append(
+	  				            $('<td>').text(item.segmentEnglishName),
+	  				            $('<td>').text(item.segmentFrenchName),
+	  				            $('<td>').text(item.segmentGermanName),
+	  				          	$('<td>').append(b)
+	  				        );//.appendTo('#productSegmentTable');
+	  				});
+	  				
+	  				$('#productSegmentTable').DataTable()
+			  		   .raws.add(response);
+	  			}); */
+						  			
+	  		}else{
+	  			dTable = $('#productSegmentTable').DataTable( {
+		  	        "ajax": {
+		  	        	"url": "listProductSegmentsRest?productId="+productId,
+		  	        	"dataSrc": ""
+		  	        },
+		  	        "columns": [
+		  	            { "mData": "segmentEnglishName" },
+		  	            { "mData": "segmentFrenchName" },
+		  	            { "mData": "segmentGermanName" },
+		  	            { "mData": function(rowData){
+		  	            	var a = rowData.productId;
+		  	            	var b = "<button onclick=\"updateCallById('"+a+"')\">Edit</button> &nbsp;&nbsp;";
+		  	            	b += "<button onclick=\"deleteCallById('"+a+"')\">Delete</button> &nbsp;&nbsp;";
+		  	            	b += "<button onclick=\"listSegmentCallById('"+a+"')\">List Segment</button>";
+		  	            	return b;
+		  	            }} 
+		  	        ]
+		  	    } );
+	  		}
+	  		
+	  	}
+  	</script>
+</head>
+<body>
+<div class="container-fluid">
+		<form th:action="@{/admin/home}" method="get">
+			<button class="btn btn-md btn-warning btn-block" type="Submit">Home</button>
+		</form>
+		<div class="col-md-12">
+			<div class="col-md-4"></div>
+			<div class="col-md-4"><h1>List of Products</h1></div>
+			<div class="col-md-4"></div>
+		</div>
+
+		<div id="div_product">		
+			<table id="productTable" >
+				<thead>
+					<tr>
+						<th>
+							Product Category
+						</th>
+						<th>
+							Product Name
+						</th>
+						<th>
+							is Manifold?
+						</th>
+						<th>
+							&nbsp;
+						</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<th>
+							Product Category
+						</th>
+						<th>
+							Product Name
+						</th>
+						<th>
+							is Manifold?
+						</th>
+						<th>
+							&nbsp;
+						</th>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<div id="div_segments">
+			<table id="productSegmentTable" >
+			<thead>
+				<tr>
+					<th>
+						Seg. English Name
+					</th>
+					<th>
+						Seg. French Name
+					</th>
+					<th>
+						Seg. German Name
+					</th>
+					<th>
+						&nbsp;
+					</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th>
+						Seg. English Name
+					</th>
+					<th>
+						Seg. French Name
+					</th>
+					<th>
+						Seg. German Name
+					</th>
+					<th>
+						&nbsp;
+					</th>
+				</tr>
+			</tfoot>
+		</table>
+		</div>
+	</div>
+</body>
+</html>

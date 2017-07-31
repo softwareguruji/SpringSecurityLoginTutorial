@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.example.model.MultiLanguageProduct;
 import com.example.model.MultiLanguageProductSegment;
 import com.example.repository.MultiLangProductSegmentRepository;
 
@@ -29,6 +30,13 @@ public class SegmentImpla implements SegmentService {
 	@Override
 	public Page<MultiLanguageProductSegment> listAllByPage(Pageable pageable) {
 		return productSegmentRepository.findAll(pageable);
+	}
+
+	@Override
+	public List<MultiLanguageProductSegment> listByProductByPage(long productId) {
+		MultiLanguageProduct product = new MultiLanguageProduct();
+		product.setProductId(productId);
+		return productSegmentRepository.findByProduct(product);
 	}
 
 }
