@@ -51,47 +51,18 @@
 	  		}
 	  	}
 	  	
+	  	//Datatable updates
+	  	var prodSegTable;
+	  	
 	  	function listSegmentCallById(productId){
 	  		//document.location.href = "viewProductSegment?product_id="+productId;
-	  		var dTable;
 	  		
-	  		alert('productId : '+productId);
 	  		if($.fn.DataTable.isDataTable('#productSegmentTable')){
 	  			
-	  			//var url =
-	  			alert('1');
-	  			$(dTable).dataTable().api().ajax.url('listProductSegmentsRest?productId='+productId).load();
-	  			$(dTable).dataTable().api().draw();
-	  			alert('2');
-	  			/* $('#productSegmentTable').DataTable()
-		  		   .rows().remove().draw();
-	  			
-	  			$.ajax({
-	  			  url: "listProductSegmentsRest?productId="+productId,
-	  			}).done(function(response) {
-	  				
-	  				var tr;
-	  				$.each(response, function(i, item){
-	  					//alert(item.segmentId);
-	  					var a = item.productId;
-	  	            	var b = "<button onclick=\"updateCallById('"+a+"')\">Edit</button> &nbsp;&nbsp;";
-	  	            	b += "<button onclick=\"deleteCallById('"+a+"')\">Delete</button> &nbsp;&nbsp;";
-	  	            	b += "<button onclick=\"listSegmentCallById('"+a+"')\">List Segment</button>";
-	  					
-	  					tr = $('<tr>').append(
-	  				            $('<td>').text(item.segmentEnglishName),
-	  				            $('<td>').text(item.segmentFrenchName),
-	  				            $('<td>').text(item.segmentGermanName),
-	  				          	$('<td>').append(b)
-	  				        );//.appendTo('#productSegmentTable');
-	  				});
-	  				
-	  				$('#productSegmentTable').DataTable()
-			  		   .raws.add(response);
-	  			}); */
+	  			prodSegTable.ajax.url('listProductSegmentsRest?productId='+productId).load();
 						  			
 	  		}else{
-	  			dTable = $('#productSegmentTable').DataTable( {
+	  			prodSegTable = $('#productSegmentTable').DataTable( {
 		  	        "ajax": {
 		  	        	"url": "listProductSegmentsRest?productId="+productId,
 		  	        	"dataSrc": ""
@@ -124,7 +95,9 @@
 			<div class="col-md-4"><h1>List of Products</h1></div>
 			<div class="col-md-4"></div>
 		</div>
-
+		<div>
+			<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#productAddFormModal">Add New Product Information</button>
+		</div>
 		<div id="div_product">		
 			<table id="productTable" >
 				<thead>
@@ -161,6 +134,9 @@
 				</tfoot>
 			</table>
 		</div>
+
+	<hr>
+
 		<div id="div_segments">
 			<table id="productSegmentTable" >
 			<thead>
@@ -196,7 +172,66 @@
 				</tr>
 			</tfoot>
 		</table>
+	</div>
+<hr>
+</div>
+
+<!-- Modals -->
+<!-- Add Product Model -->
+	<div id="productAddFormModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Product Add Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Add New Product Information</h4>
+				</div>
+				<div class="modal-body">
+					<form autocomplete="off" action="#" th:action="@{/admin/product}"
+						th:object="${product}" method="post" class="form-horizontal"
+						role="form">
+						<div class="form-group">
+							<div class="col-sm-9">
+								<label th:if="${#fields.hasErrors('productCategory')}"
+									th:errors="*{productCategory}" class="validation-message"></label>
+								<input type="text" th:field="*{productCategory}"
+									placeholder="Category" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-9">
+								<label th:if="${#fields.hasErrors('productName')}"
+									th:errors="*{productName}" class="validation-message"></label>
+								<input type="text" th:field="*{productName}"
+									placeholder="Product Name" class="form-control" />
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-9" style="text-align: left;">
+								<p class="form-control">
+									<input type="checkbox" th:field="*{manifold}" /> Is it Manifold
+									Product?
+								</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-9">
+								<button type="submit" class="btn btn-primary btn-block">
+									Save</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" type="submit" class="btn btn-default" data-dismiss="modal">Save & Add New</button>
+					<button type="button" type="submit" class="btn btn-default" data-dismiss="modal">Save & Close</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
+			</div>
+
 		</div>
 	</div>
+
 </body>
 </html>
