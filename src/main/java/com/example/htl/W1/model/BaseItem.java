@@ -28,6 +28,9 @@ public class BaseItem {
 	@JoinColumn(name = "item_type_ref")
 	private ItemType itemTypeObj;
 	
+	@Column(name = "item_price", columnDefinition="Decimal(10,2) default '0.00'")
+	private double price;
+	
 	public long getBaseItemId() {
 		return baseItemId;
 	}
@@ -51,5 +54,15 @@ public class BaseItem {
 	public void setItemTypeObj(ItemType itemTypeObj) {
 		this.itemTypeObj = itemTypeObj;
 	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
+	
 	
 }

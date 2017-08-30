@@ -194,4 +194,12 @@ public class MenuItemController {
 		modelAndView.setViewName("/admin/item/item_type");
 		return modelAndView;
 	}
+	
+	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.GET)
+	public ModelAndView generateMenu(){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.setViewName("/admin/item/menu_generator");
+		return modelAndView;
+	}
 }

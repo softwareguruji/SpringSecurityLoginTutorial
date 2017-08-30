@@ -46,7 +46,15 @@ public class BaseItemServiceImpl implements BaseItemService {
 
 	@Override
 	public BaseItem getByItemNameAndItemType(BaseItem baseItemObj) {
-		return baseItemRepository.findByItemNameAndItemTypeObj(baseItemObj.getItemName(), baseItemObj.getItemTypeObj());
+		
+		BaseItem searchedBaseItemObj = baseItemRepository.findByItemNameAndItemTypeObj(baseItemObj.getItemName(), baseItemObj.getItemTypeObj());
+		
+		if(baseItemObj.getBaseItemId() != 0
+				&& baseItemObj.getBaseItemId() == searchedBaseItemObj.getBaseItemId()){
+			return null;
+		}
+		
+		return searchedBaseItemObj;
 	}
 
 }
