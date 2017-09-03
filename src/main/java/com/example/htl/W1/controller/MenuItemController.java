@@ -15,8 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.htl.W1.model.BaseItem;
 import com.example.htl.W1.model.ItemType;
+import com.example.htl.W1.model.Menu;
+import com.example.htl.W1.model.MenuType;
 import com.example.htl.W1.service.BaseItemService;
 import com.example.htl.W1.service.ItemTypeService;
+import com.example.htl.W1.service.MenuService;
+import com.example.htl.W1.service.MenuTypeService;
 
 @Controller
 public class MenuItemController {
@@ -26,6 +30,12 @@ public class MenuItemController {
 
 	@Autowired
 	BaseItemService baseItemService;
+
+	@Autowired
+	MenuService menuService;
+
+	@Autowired
+	MenuTypeService menuTypeService;
 	
 	@RequestMapping(value="/admin/baseItem", method = RequestMethod.GET)
 	public ModelAndView baseItem(@ModelAttribute("itemTypeSelected") String itemTypeSelected){
@@ -199,7 +209,25 @@ public class MenuItemController {
 	public ModelAndView generateMenu(){
 		ModelAndView modelAndView = new ModelAndView();
 
+		List<MenuType> menuTypeList = menuTypeService.getByAll();
+		modelAndView.addObject("menuTypeList", menuTypeList);
 		
+		Menu menuObj = new Menu();
+		modelAndView.addObject("menuGenerate", menuObj);
+		
+		modelAndView.setViewName("/admin/item/menu_generator");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.POST)
+	public ModelAndView generateMenuAddUpdate(@ModelAttribute("menuGenerate") Menu menuObj){
+		ModelAndView modelAndView = new ModelAndView();
+
+		List<MenuType> menuTypeList = menuTypeService.getByAll();
+		modelAndView.addObject("menuTypeList", menuTypeList);
+		
+		menuObj = menuService.save(menuObj);
+		modelAndView.addObject("menuGenerate", menuObj);
 		
 		modelAndView.setViewName("/admin/item/menu_generator");
 		return modelAndView;

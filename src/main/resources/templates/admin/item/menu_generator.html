@@ -11,6 +11,8 @@
 </script>
 </head>
 <body>
+	<form autocomplete="off" action="#" th:action="@{/admin/menuCreate}"
+						th:object="${menuGenerate}" method="post" class="form-inline">
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12" style="margin-top: 10px;">
@@ -18,12 +20,65 @@
 					<div class="panel-heading" style="text-align: center">Create Menu Item and Price details for the same</div>
 					<div class="panel-body">
 						<div class="col-md-12">
-															
+							<div class="col-md-8">
+								<input type="hidden" th:field="*{menuId}" ></input>
+								<input type="text" th:field="*{menuName}" th:label="menuNameLabel" placeholder="Provide Menu Name"
+										class="form-control" style="width:100%"/>
+							</div>
+							<div class="col-md-4">
+								<ul style="list-style-type: none;">
+								  <li th:each="mtl : ${menuTypeList}">
+								    <input type="radio" th:field="*{menuType}" th:value="${mtl.menuTypeId}" />
+								    <label th:for="${#ids.prev('menuType')}" th:text="${mtl.menuTypeName}" >Wireframe</label>
+								  </li>
+								</ul>
+							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12" th:if="*{menuType}" th:switch="*{menuType.menuTypeId}">
+				<div class="panel panel-default" th:case="1">
+					<div class="panel-heading" style="text-align: center">Fill up Fixed Menu Item Details</div>
+					<div class="panel-body">
+						<div class="col-md-12">
+							<div class="col-md-8">
+								<textarea rows="4" 
+									cols="100%" 
+									th:field="*{fixedMenuItemObj.fixedMenuDescription}" 
+									placeholder="Fill complete Fixed manu display description"
+									class="form-control"></textarea>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default" th:case="2">
+					<div class="panel-heading" style="text-align: center">Fill up Customized Menu Item Details</div>
+					<div class="panel-body">
+						<div class="col-md-12">
+							<div class="col-md-8">
+								<textarea rows="4" 
+									cols="100%" 
+									th:field="*{fixedMenuItemObj.fixedMenuDescription}" 
+									placeholder="Fill complete Fixed manu display description"
+									class="form-control"></textarea>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div align="center">
+					<div class="col-md-offset-5 col-md-2">
+						<input type="submit" value="Save" class="btn btn-default">
+						<input type="reset" value="Reset" class="btn btn-default">
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	</form>
 </body>
 </html>
