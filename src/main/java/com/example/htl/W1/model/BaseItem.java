@@ -1,11 +1,17 @@
 package com.example.htl.W1.model;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -30,6 +36,11 @@ public class BaseItem {
 	
 	@Column(name = "item_price", columnDefinition="Decimal(10,2) default '0.00'")
 	private double price;
+
+	
+	/*@ManyToMany(mappedBy="listOfAvailableOptions")
+	private Set<CustomMenuItemOptions> customMenuItemOptions;
+	*/
 	
 	public long getBaseItemId() {
 		return baseItemId;
@@ -62,7 +73,15 @@ public class BaseItem {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	
+
+/*	public Set<CustomMenuItemOptions> getCustomMenuItemOptions() {
+		return customMenuItemOptions;
+	}
+
+	public void setCustomMenuItemOptions(Set<CustomMenuItemOptions> customMenuItemOptions) {
+		this.customMenuItemOptions = customMenuItemOptions;
+	}
+*/	
 	
 	
 }
