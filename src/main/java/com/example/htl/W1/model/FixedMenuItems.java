@@ -1,5 +1,6 @@
 package com.example.htl.W1.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,7 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -22,8 +25,10 @@ public class FixedMenuItems {
 	@Column(name="fixed_menu_description")
 	private String fixedMenuDescription;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name="ref_menu_id", nullable=false, columnDefinition="int(11)")
+	@MapsId
+	@PrimaryKeyJoinColumn
 	private Menu menuItemReference;
 
 	public long getFixedMenuItemsId() {

@@ -18,6 +18,7 @@ import com.example.htl.W1.model.ItemType;
 import com.example.htl.W1.model.Menu;
 import com.example.htl.W1.model.MenuType;
 import com.example.htl.W1.service.BaseItemService;
+import com.example.htl.W1.service.FixedMenuItemService;
 import com.example.htl.W1.service.ItemTypeService;
 import com.example.htl.W1.service.MenuService;
 import com.example.htl.W1.service.MenuTypeService;
@@ -34,6 +35,9 @@ public class MenuItemController {
 	@Autowired
 	MenuService menuService;
 
+	@Autowired
+	FixedMenuItemService fixedMenuItemService;
+	
 	@Autowired
 	MenuTypeService menuTypeService;
 	
@@ -225,8 +229,17 @@ public class MenuItemController {
 
 		List<MenuType> menuTypeList = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", menuTypeList);
+
+		if(menuObj.getFixedMenuItemObj() != null
+				&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
+			
+			System.out.println("Description: "+menuObj.getFixedMenuItemObj().getFixedMenuDescription());
+			menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
+			//menuObj.setFixedMenuItemObj(fixedMenuItemService.save(menuObj.getFixedMenuItemObj()));
+		}
 		
 		menuObj = menuService.save(menuObj);
+
 		modelAndView.addObject("menuGenerate", menuObj);
 		
 		modelAndView.setViewName("/admin/item/menu_generator");
