@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.htl.W1.model.BaseItem;
+import com.example.htl.W1.model.FixedMenuItems;
 import com.example.htl.W1.model.ItemType;
 import com.example.htl.W1.model.Menu;
 import com.example.htl.W1.model.MenuType;
@@ -230,13 +231,25 @@ public class MenuItemController {
 		List<MenuType> menuTypeList = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", menuTypeList);
 
-		if(menuObj.getFixedMenuItemObj() != null
-				&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
-			
-			System.out.println("Description: "+menuObj.getFixedMenuItemObj().getFixedMenuDescription());
-			menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
-			//menuObj.setFixedMenuItemObj(fixedMenuItemService.save(menuObj.getFixedMenuItemObj()));
+		if(menuObj.getMenuType().getMenuTypeId() == 1){
+			if(menuObj.getFixedMenuItemObj() != null
+					&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
+				menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
+				
+			}	
+		}else if(menuObj.getMenuType().getMenuTypeId() == 2){
+			if(menuObj.getCustomMenuItemObj() != null
+					&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
+				menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
+				
+			}	
+
+			FixedMenuItems  fmiObj = fixedMenuItemService.getByMenuItem(menuObj);
+			if(fmiObj != null){
+				fixedMenuItemService.delete(fmiObj);
+			}
 		}
+		
 		
 		menuObj = menuService.save(menuObj);
 

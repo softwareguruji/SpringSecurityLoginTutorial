@@ -1,9 +1,12 @@
 package com.example.htl.W1.service;
 
 import com.example.htl.W1.model.FixedMenuItems;
+import com.example.htl.W1.model.Menu;
 
 public interface FixedMenuItemService {
 
-	FixedMenuItems save(FixedMenuItems fixedmenuItem);
+	FixedMenuItems save(FixedMenuItems fixedMenuItem);
+	FixedMenuItems getByMenuItem(Menu menuObj);
+	void delete(FixedMenuItems fixedMenuItem);
 	
 }

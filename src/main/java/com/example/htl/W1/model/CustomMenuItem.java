@@ -1,5 +1,8 @@
 package com.example.htl.W1.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,7 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -22,10 +28,15 @@ public class CustomMenuItem {
 	@Column(name="custom_description")
 	private String customizationDescription;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name="ref_menu_id", nullable=false, columnDefinition="int(11)")
+	@MapsId
+	@PrimaryKeyJoinColumn
 	private Menu menuItemReference;
 
+	@OneToMany(fetch = FetchType.LAZY)
+	private Set<CustomMenuItemOptions> menuItemQuestions;
+	
 	public long getCustomMenuItemId() {
 		return customMenuItemId;
 	}

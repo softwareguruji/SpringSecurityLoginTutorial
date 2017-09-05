@@ -33,7 +33,8 @@ public class Menu {
 	@PrimaryKeyJoinColumn
 	private FixedMenuItems fixedMenuItemObj;
 
-	@OneToOne(fetch=FetchType.LAZY, optional=true, mappedBy="menuItemReference")
+	@OneToOne(fetch=FetchType.LAZY, optional=true, mappedBy="menuItemReference", cascade={CascadeType.ALL})
+	@PrimaryKeyJoinColumn
 	private CustomMenuItem customMenuItemObj;
 	
 	

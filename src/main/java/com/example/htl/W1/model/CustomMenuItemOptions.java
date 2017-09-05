@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -45,6 +46,10 @@ public class CustomMenuItemOptions {
 	)
 	private Set<BaseItem> listOfAvailableOptions;
 
+	@ManyToOne
+	@JoinColumn(name="ref_custom_menu_item", nullable=false, columnDefinition="int(11)")
+	private CustomMenuItem customMenuItemObj;
+	
 	public long getCustomMenuItemOptionId() {
 		return customMenuItemOptionId;
 	}
