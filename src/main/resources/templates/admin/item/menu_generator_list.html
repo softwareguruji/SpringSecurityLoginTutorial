@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Menu List</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+	function listByMenuType(value){
+		$('#menu_search_form').submit();
+	}
+</script>
+
+</head>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12" align="center" style="margin-top: 10px;">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Menu List
+				</div>
+				<div class="panel-body">
+					<div>
+						<div class="col-md-4 form-group">
+							<form id="menu_search_form" th:action="@{/admin/menuCreatorList}">
+								<label for="menuType">Select Menu Type:</label>
+								<select class="form-control" id="menuType" name="menuTypeSelected" th:object="${menuTypeSelected}" onchange="listByMenuType(this.value)">
+								    <option value="-1">All</option>
+								    <option 
+								    	th:each="menuTypeObj : ${menuTypeList}" 
+								    	th:value="${menuTypeObj.menuTypeId}" 
+								    	th:text="${menuTypeObj.menuTypeName}"
+								    	th:selected="(${menuTypeObj.menuTypeId} == ${menuTypeSelected})"
+                               			/>
+								 </select>
+							 </form>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

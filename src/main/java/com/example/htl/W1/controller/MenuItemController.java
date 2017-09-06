@@ -258,4 +258,29 @@ public class MenuItemController {
 		modelAndView.setViewName("/admin/item/menu_generator");
 		return modelAndView;
 	}
+	
+	@RequestMapping(value="/admin/menuCreatorList", method=RequestMethod.GET)
+	public ModelAndView listGeneratorMenu(){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		List<MenuType> listMenuType = menuTypeService.getByAll();
+		modelAndView.addObject("menuTypeList", listMenuType);
+		
+		modelAndView.setViewName("/admin/item/menu_generator_list");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/admin/menuCreatorList", method=RequestMethod.POST)
+	public ModelAndView listGeneratorMenu(@ModelAttribute("menuType") String menuType){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		List<MenuType> listMenuType = menuTypeService.getByAll();
+		modelAndView.addObject("menuTypeList", listMenuType);
+
+		modelAndView.addObject("menuTypeSelected", menuType);
+		
+		modelAndView.setViewName("/admin/item/menu_generator_list");
+		return modelAndView;
+	}
+	
 }

@@ -33,7 +33,7 @@
 								<ul style="list-style-type: none;">
 								  <li th:each="mtl : ${menuTypeList}">
 								    <input type="radio" th:field="*{menuType}" th:value="${mtl.menuTypeId}" />
-								    <label th:for="${#ids.prev('menuType')}" th:text="${mtl.menuTypeName}" >Wireframe</label>
+								    <label th:for="${#ids.prev('menuType')}" th:text="${mtl.menuTypeName}" >Types</label>
 								  </li>
 								</ul>
 							</div>
