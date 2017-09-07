@@ -24,7 +24,7 @@
 				<div class="panel-body">
 					<div>
 						<div class="col-md-4 form-group">
-							<form id="menu_search_form" th:action="@{/admin/menuCreatorList}">
+							<form id="menu_search_form" th:action="@{/admin/menuCreatorList}" method="post">
 								<label for="menuType">Select Menu Type:</label>
 								<select class="form-control" id="menuType" name="menuTypeSelected" th:object="${menuTypeSelected}" onchange="listByMenuType(this.value)">
 								    <option value="-1">All</option>
@@ -39,6 +39,76 @@
 						</div>
 					</div>	
 				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-12" style="border-style: solid; border-color: #ddd; border-width: 1px; border-radius: 4px; text-shadow: 5px; margin-bottom: 5px;">
+				<table class="table" style="margin:5px;">
+					<thead>
+						<tr>
+							<th>
+								Index
+							</th>
+							<th>
+								Menu Name
+							</th>
+							<th>
+								Menu Type
+							</th>
+							<th>
+								&nbsp;
+							</th>
+							<th>
+								&nbsp;
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:if="${#lists.isEmpty(menuList)}">
+							<td colspan="5" align="center">
+								No data found
+							</td>
+						</tr>
+						<tr th:unless="${#lists.isEmpty(menuList)}" th:each="mObj, start:${menuList}">
+							<td th:text="${start.count}">
+								Index
+							</td>
+							<td th:text="${mObj.menuName}">
+								Item Name
+							</td>
+							<td th:text="${mObj.menuType.menuTypeName}">
+								Item Type
+							</td>
+							<td>
+								<form
+									action="#"
+									method="get" 
+									th:action="@{/admin/baseItemEdit}">
+									<input type="hidden" name="menuId" th:value="${mObj.menuId}"/>
+									<button 
+										type="submit"
+										class="btn btn-xs">
+										Edit
+									</button>
+								</form>
+							</td>
+							<td>
+								<form
+									action="#"
+									method="get" 
+									th:action="@{/admin/baseItemDelete}">
+									<input type="hidden" name="menuId" th:value="${mObj.menuId}" />
+									<button 
+										type="submit"
+										class="btn btn-xs">
+										Delete
+									</button>
+								</form>
+							</td>
+						</tr>
+						
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

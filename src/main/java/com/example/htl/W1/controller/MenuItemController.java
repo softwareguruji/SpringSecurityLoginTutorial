@@ -266,18 +266,31 @@ public class MenuItemController {
 		List<MenuType> listMenuType = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", listMenuType);
 		
+		List<Menu> listMenu = menuService.getByAll();
+		modelAndView.addObject("menuList", listMenu);
+		
 		modelAndView.setViewName("/admin/item/menu_generator_list");
 		return modelAndView;
 	}
 	
 	@RequestMapping(value="/admin/menuCreatorList", method=RequestMethod.POST)
-	public ModelAndView listGeneratorMenu(@ModelAttribute("menuType") String menuType){
+	public ModelAndView listGeneratorMenu(@ModelAttribute("menuTypeSelected") String menuType){
 		ModelAndView modelAndView = new ModelAndView();
 		
 		List<MenuType> listMenuType = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", listMenuType);
 
 		modelAndView.addObject("menuTypeSelected", menuType);
+		
+		MenuType menuTypeObj = menuTypeService.getByPk(Long.parseLong(menuType));
+		
+		if(menuTypeObj != null){
+			List<Menu> listMenu = menuService.getByAll(menuTypeObj);
+			modelAndView.addObject("menuList", listMenu);
+		}else{
+			List<Menu> listMenu = menuService.getByAll();
+			modelAndView.addObject("menuList", listMenu);
+		}
 		
 		modelAndView.setViewName("/admin/item/menu_generator_list");
 		return modelAndView;

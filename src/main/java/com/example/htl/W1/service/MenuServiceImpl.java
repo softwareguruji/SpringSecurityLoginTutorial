@@ -1,9 +1,12 @@
 package com.example.htl.W1.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.htl.W1.model.Menu;
+import com.example.htl.W1.model.MenuType;
 import com.example.htl.W1.repository.MenuRepository;
 
 @Service
@@ -27,6 +30,16 @@ public class MenuServiceImpl implements MenuService {
 		}*/
 		
 		return menuRepository.save(menuObj);
+	}
+
+	@Override
+	public List<Menu> getByAll() {
+		return menuRepository.findAll();
+	}
+
+	@Override
+	public List<Menu> getByAll(MenuType menuType) {
+		return menuRepository.findByMenuType(menuType);
 	}
 	
 	
