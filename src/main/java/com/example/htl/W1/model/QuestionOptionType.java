@@ -13,7 +13,7 @@ public class QuestionOptionType {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="question_option_type_id")
+	@Column(name="question_option_type_id", columnDefinition="int(11)")
 	private long id;
 	
 	@Column(name = "question_option_type_name")
