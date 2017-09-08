@@ -244,9 +244,11 @@ public class MenuItemController {
 				
 			}	
 
+			System.out.println("menu id: "+menuObj.getMenuId());
 			FixedMenuItems  fmiObj = fixedMenuItemService.getByMenuItem(menuObj);
 			if(fmiObj != null){
-				fixedMenuItemService.delete(fmiObj);
+				//fixedMenuItemService.delete(fmiObj);
+				System.out.println(fmiObj.getFixedMenuItemsId()+" --- "+fmiObj.getFixedMenuDescription());
 			}
 		}
 		

@@ -6,6 +6,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,9 +30,8 @@ public class CustomMenuItem {
 	private String customizationDescription;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	@JoinColumn(name="ref_menu_id", nullable=false, columnDefinition="int(11)")
-	@MapsId
-	@PrimaryKeyJoinColumn
+	@JoinColumn(name="ref_menu_id", nullable=false, columnDefinition="int(11)", foreignKey=@ForeignKey(name="fk_tbl_cmi_menu_id"), referencedColumnName="menu_id")
+	//@PrimaryKeyJoinColumn(name="ref_menu_id", referencedColumnName="menu_id")
 	private Menu menuItemReference;
 
 	@OneToMany(fetch = FetchType.LAZY)
