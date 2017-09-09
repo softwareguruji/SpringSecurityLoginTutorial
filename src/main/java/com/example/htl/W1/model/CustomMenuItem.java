@@ -29,7 +29,7 @@ public class CustomMenuItem {
 	@Column(name="custom_description")
 	private String customizationDescription;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
+	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.DETACH})
 	@JoinColumn(name="ref_menu_id", nullable=false, columnDefinition="int(11)", foreignKey=@ForeignKey(name="fk_tbl_cmi_menu_id"), referencedColumnName="menu_id")
 	//@PrimaryKeyJoinColumn(name="ref_menu_id", referencedColumnName="menu_id")
 	private Menu menuItemReference;

@@ -12,10 +12,29 @@
 		selector: 'textarea',
 		toolbar1: "bold italic underline"
 	});
+	
+	function confirmWithMessage(){
+		
+		var conVal = confirm('If you change it. Details will be lost and you need to rewrite it. Are you sure you want to change it?');
+		if(conVal){
+			alert('confirmed...');
+			document.getElementById('changeMenuType').value = true;
+			document.getElementById('menuGenerate').submit();
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+	
+	function submitForm(){
+		document.getElementById('menuGenerate').submit();
+		
+	}
 </script>
 </head>
 <body>
-	<form autocomplete="off" action="#" th:action="@{/admin/menuCreate}"
+	<form id="menuGenerate" autocomplete="off" action="#" th:action="@{/admin/menuCreate}"
 						th:object="${menuGenerate}" method="post" class="form-inline">
 	<div class="container">
 		<div class="row">
@@ -28,11 +47,13 @@
 								<input type="hidden" th:field="*{menuId}" ></input>
 								<input type="text" th:field="*{menuName}" th:label="menuNameLabel" placeholder="Provide Menu Name"
 										class="form-control" style="width:100%"/>
+								<input type="hidden" id="changeMenuType" name="changeMenuType" value="false"/>
 							</div>
 							<div class="col-md-4">
 								<ul style="list-style-type: none;">
 								  <li th:each="mtl : ${menuTypeList}">
-								    <input type="radio" th:field="*{menuType}" th:value="${mtl.menuTypeId}" />
+								    <input type="radio" th:if="*{menuType} == null" th:field="*{menuType}" th:value="${mtl.menuTypeId}"/>
+								    <input type="radio" th:unless="*{menuType} == null" th:field="*{menuType}" th:value="${mtl.menuTypeId}" onclick="return confirmWithMessage();"/>
 								    <label th:for="${#ids.prev('menuType')}" th:text="${mtl.menuTypeName}" >Types</label>
 								  </li>
 								</ul>
@@ -46,7 +67,7 @@
 					<div class="panel-heading" style="text-align: center">Fill up Fixed Menu Item Details</div>
 					<div class="panel-body">
 						<div class="col-md-12">
-							<div class="col-md-8">
+							<div class="col-md-12">
 								<input type="hidden" th:field="*{fixedMenuItemObj.fixedMenuItemsId}" ></input>
 								<textarea rows="4" 
 									cols="100%" 
@@ -62,7 +83,7 @@
 					<div class="panel-heading" style="text-align: center">Fill up Customized Menu Item Details</div>
 					<div class="panel-body">
 						<div class="col-md-12">
-							<div class="col-md-8">
+							<div class="col-md-12">
 								<input type="hidden" th:field="*{customMenuItemObj.customMenuItemId}" >
 								<textarea rows="4" 
 									cols="100%" 
@@ -70,6 +91,40 @@
 									placeholder="Fill complete Fixed manu display description"
 									class="form-control"></textarea>
 								
+							</div>
+							
+							<div th:if="*{customMenuItemObj} != null" class="col-md-12">
+								<hr />
+								<div id="optionCreator">
+									<label for="itemType">Select Item Type:</label>
+									<select class="form-control" id="itemType" name="itemTypeSelected" th:object="${itemTypeSelected}" onchange="listByItemType(this.value)">
+									    <option value="-1">Select One</option>
+									    <option 
+									    	th:each="itemTypeObj : ${itemTypeList}" 
+									    	th:value="${itemTypeObj.itemTypeId}" 
+									    	th:text="${itemTypeObj.itemTypeName}"
+									    	th:selected="(${itemTypeObj.itemTypeId} == ${itemTypeSelected})"
+                                			/>
+									 </select>
+									 <input type="button" value="Show Base Items" class="btn btn-md" onclick="submitForm();"/>
+									 <input type="text" th:object="${questionText}" placeholder="Question Text"
+										class="form-control" style="width:100%; margin-top: 5px;"/>
+									
+									<!-- Start -->
+									<div th:if="${#lists.isEmpty(baseItemList)}">
+										No data found
+									</div>
+									<div class="col-md-12" th:unless="${#lists.isEmpty(baseItemList)}" >
+										<div class="col-md-2" th:each="biObj, start:${baseItemList}">
+											<input type="checkbox" th:text="${biObj.itemName}">
+										</div>
+									</div>
+									
+									<!-- End -->
+									
+									
+									
+								</div>
 							</div>
 						</div>
 					</div>

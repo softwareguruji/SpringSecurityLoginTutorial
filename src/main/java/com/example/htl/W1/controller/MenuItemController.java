@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.htl.W1.model.BaseItem;
+import com.example.htl.W1.model.CustomMenuItem;
 import com.example.htl.W1.model.FixedMenuItems;
 import com.example.htl.W1.model.ItemType;
 import com.example.htl.W1.model.Menu;
 import com.example.htl.W1.model.MenuType;
 import com.example.htl.W1.service.BaseItemService;
+import com.example.htl.W1.service.CustomMenuItemService;
 import com.example.htl.W1.service.FixedMenuItemService;
 import com.example.htl.W1.service.ItemTypeService;
 import com.example.htl.W1.service.MenuService;
 import com.example.htl.W1.service.MenuTypeService;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Controller
 public class MenuItemController {
@@ -38,6 +42,9 @@ public class MenuItemController {
 
 	@Autowired
 	FixedMenuItemService fixedMenuItemService;
+	
+	@Autowired
+	CustomMenuItemService customMenuItemService;
 	
 	@Autowired
 	MenuTypeService menuTypeService;
@@ -225,33 +232,56 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.POST)
-	public ModelAndView generateMenuAddUpdate(@ModelAttribute("menuGenerate") Menu menuObj){
+	public ModelAndView generateMenuAddUpdate(@ModelAttribute("menuGenerate") Menu menuObj, 
+												@ModelAttribute("changeMenuType") boolean changeMenuType,
+												@ModelAttribute("itemTypeSelected") String itemTypeSelected){
 		ModelAndView modelAndView = new ModelAndView();
 
+		if(itemTypeSelected != null
+				&& itemTypeSelected.trim().length()>0){
+			ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeSelected));
+			List<BaseItem> baseItemList = baseItemService.getByAll(itemTypeObj);
+			modelAndView.addObject("baseItemList", baseItemList);
+			modelAndView.addObject("itemTypeSelected",itemTypeSelected);
+		}else{
+			modelAndView.addObject("itemTypeSelected","");
+		}
+		
+		System.out.println("changeMenuType :: "+changeMenuType);
+		 
 		List<MenuType> menuTypeList = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", menuTypeList);
 
-		if(menuObj.getMenuType().getMenuTypeId() == 1){
-			if(menuObj.getFixedMenuItemObj() != null
-					&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
-				menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
-				
-			}	
-		}else if(menuObj.getMenuType().getMenuTypeId() == 2){
-			if(menuObj.getCustomMenuItemObj() != null
-					&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
-				menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
-				
-			}	
-
-			System.out.println("menu id: "+menuObj.getMenuId());
-			FixedMenuItems  fmiObj = fixedMenuItemService.getByMenuItem(menuObj);
-			if(fmiObj != null){
-				//fixedMenuItemService.delete(fmiObj);
-				System.out.println(fmiObj.getFixedMenuItemsId()+" --- "+fmiObj.getFixedMenuDescription());
+		List<ItemType> itemTypeList = itemTypeService.getByAll();
+		modelAndView.addObject("itemTypeList", itemTypeList);
+		
+		if(changeMenuType){
+			if(menuObj.getMenuType().getMenuTypeId() == 1){
+				CustomMenuItem  cmiObj = customMenuItemService.getByMenuItem(menuObj);
+				if(cmiObj != null)
+					customMenuItemService.delete(cmiObj);
+			}else if(menuObj.getMenuType().getMenuTypeId() == 2){
+				FixedMenuItems  fmiObj = fixedMenuItemService.getByMenuItem(menuObj);
+				if(fmiObj != null)
+					fixedMenuItemService.delete(fmiObj);
+			}
+		}else{
+			if(menuObj.getMenuType().getMenuTypeId() == 1){
+				if(menuObj.getFixedMenuItemObj() != null
+						&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
+					menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
+					
+				}	
+			}else if(menuObj.getMenuType().getMenuTypeId() == 2){
+				if(menuObj.getCustomMenuItemObj() != null
+						&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
+					menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
+					
+					
+					
+				}	
 			}
 		}
-		
 		
 		menuObj = menuService.save(menuObj);
 
