@@ -19,12 +19,15 @@ import com.example.htl.W1.model.FixedMenuItems;
 import com.example.htl.W1.model.ItemType;
 import com.example.htl.W1.model.Menu;
 import com.example.htl.W1.model.MenuType;
+import com.example.htl.W1.model.QuestionOptionType;
+import com.example.htl.W1.repository.QuestionOptionTypeRepository;
 import com.example.htl.W1.service.BaseItemService;
 import com.example.htl.W1.service.CustomMenuItemService;
 import com.example.htl.W1.service.FixedMenuItemService;
 import com.example.htl.W1.service.ItemTypeService;
 import com.example.htl.W1.service.MenuService;
 import com.example.htl.W1.service.MenuTypeService;
+import com.example.htl.W1.service.QuestionOptionTypeService;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
 
@@ -45,6 +48,9 @@ public class MenuItemController {
 	
 	@Autowired
 	CustomMenuItemService customMenuItemService;
+
+	@Autowired
+	QuestionOptionTypeService questionOptionTypeService;
 	
 	@Autowired
 	MenuTypeService menuTypeService;
@@ -246,6 +252,9 @@ public class MenuItemController {
 		}else{
 			modelAndView.addObject("itemTypeSelected","");
 		}
+		
+		List<QuestionOptionType> listQuestionOptionTypes = questionOptionTypeService.getByAll();
+		modelAndView.addObject("listQuestionOptionTypes", listQuestionOptionTypes);
 		
 		System.out.println("changeMenuType :: "+changeMenuType);
 		 

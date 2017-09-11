@@ -19,4 +19,22 @@ public class QuestionOptionType {
 	@Column(name = "question_option_type_name")
 	private String quetionOptionTypeName;
 
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getQuetionOptionTypeName() {
+		return quetionOptionTypeName;
+	}
+
+	public void setQuetionOptionTypeName(String quetionOptionTypeName) {
+		this.quetionOptionTypeName = quetionOptionTypeName;
+	}
+	
+	
+
 }

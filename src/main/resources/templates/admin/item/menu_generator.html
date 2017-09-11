@@ -32,6 +32,19 @@
 		
 	}
 </script>
+<style type="text/css">
+.inlineList {
+   display: flex;
+   flex-direction: row;
+   /* Below sets up your display method: flex-start|flex-end|space-between|space-around */
+   justify-content: flex-start; 
+   /* Below removes bullets and cleans white-space */
+   list-style: none;
+   padding: 0;
+   /* Bonus: forces no word-wrap */
+   white-space: nowrap;
+ }
+</style>
 </head>
 <body>
 	<form id="menuGenerate" autocomplete="off" action="#" th:action="@{/admin/menuCreate}"
@@ -96,27 +109,43 @@
 							<div th:if="*{customMenuItemObj} != null" class="col-md-12">
 								<hr />
 								<div id="optionCreator">
-									<label for="itemType">Select Item Type:</label>
-									<select class="form-control" id="itemType" name="itemTypeSelected" th:object="${itemTypeSelected}" onchange="listByItemType(this.value)">
-									    <option value="-1">Select One</option>
-									    <option 
-									    	th:each="itemTypeObj : ${itemTypeList}" 
-									    	th:value="${itemTypeObj.itemTypeId}" 
-									    	th:text="${itemTypeObj.itemTypeName}"
-									    	th:selected="(${itemTypeObj.itemTypeId} == ${itemTypeSelected})"
-                                			/>
-									 </select>
-									 <input type="button" value="Show Base Items" class="btn btn-md" onclick="submitForm();"/>
-									 <input type="text" th:object="${questionText}" placeholder="Question Text"
-										class="form-control" style="width:100%; margin-top: 5px;"/>
-									
+									<div class="col-md-12">
+										Add new options to choose with it's question...
+										<input type="text" th:object="${questionText}" placeholder="Question Text"
+												class="form-control" style="width:100%; margin-top: 5px; margin-bottom: 5px;"/>
+									</div>
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<label for="itemType">Select Item Type:</label>
+											<select class="form-control" id="itemType" name="itemTypeSelected" th:object="${itemTypeSelected}" onchange="listByItemType(this.value)">
+											    <option value="-1">Select One</option>
+											    <option 
+											    	th:each="itemTypeObj : ${itemTypeList}" 
+											    	th:value="${itemTypeObj.itemTypeId}" 
+											    	th:text="${itemTypeObj.itemTypeName}"
+											    	th:selected="(${itemTypeObj.itemTypeId} == ${itemTypeSelected})"
+		                                			/>
+											 </select>
+											 <input type="button" value="Show Base Items" class="btn btn-md" onclick="submitForm();"/>
+										</div>
+										<div class="col-md-6" style="display:inline">
+											 <label>Select type of selection providing:</label>
+											 <ul th:if="${not #lists.isEmpty(listQuestionOptionTypes)}" th:object="${listQuestionOptionTypes}" class="inlineList">
+											 	<li th:each="optionTypeId : ${listQuestionOptionTypes}">
+											 		<input type="radio" th:value="${optionTypeId.id}" th:id="${'queOptType'+optionTypeId.id}"/><label th:text="${optionTypeId.quetionOptionTypeName}" th:for="${'queOptType'+optionTypeId.id}" style="margin-right: 3px;"></label>
+											 	</li>
+											 </ul>
+											 
+										</div>
+									</div>
+									 
 									<!-- Start -->
 									<div th:if="${#lists.isEmpty(baseItemList)}">
 										No data found
 									</div>
-									<div class="col-md-12" th:unless="${#lists.isEmpty(baseItemList)}" >
-										<div class="col-md-2" th:each="biObj, start:${baseItemList}">
-											<input type="checkbox" th:text="${biObj.itemName}">
+									<div class="col-md-12" th:unless="${#lists.isEmpty(baseItemList)}" style="margin-top: 5px;">
+										<div class="col-md-3" th:each="biObj, start:${baseItemList}">
+											<input type="checkbox" th:value="${biObj.baseItemId}" th:id="${'baseItem'+biObj.baseItemId}" style="margin: 2px;"><label th:text="${biObj.itemName}" th:for="${'baseItem'+biObj.baseItemId}"></label>
 										</div>
 									</div>
 									
