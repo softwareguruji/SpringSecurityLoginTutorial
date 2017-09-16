@@ -106,12 +106,13 @@
 								
 							</div>
 							
-							<div th:if="*{customMenuItemObj} != null" class="col-md-12">
+							<div th:if="*{customMenuItemObj} != null" class="col-md-12" th:object="${custMenuItemOptionsObj}">
 								<hr />
+								<input type="hidden" th:field="*{customMenuItemObj.customMenuItemId}" ></input>
 								<div id="optionCreator">
 									<div class="col-md-12">
 										Add new options to choose with it's question...
-										<input type="text" th:object="${questionText}" placeholder="Question Text"
+										<input type="text" th:field="*{questionForChoose}" placeholder="Question Text"
 												class="form-control" style="width:100%; margin-top: 5px; margin-bottom: 5px;"/>
 									</div>
 									<div class="col-md-12">
@@ -130,9 +131,9 @@
 										</div>
 										<div class="col-md-6" style="display:inline">
 											 <label>Select type of selection providing:</label>
-											 <ul th:if="${not #lists.isEmpty(listQuestionOptionTypes)}" th:object="${listQuestionOptionTypes}" class="inlineList">
+											 <ul th:if="${not #lists.isEmpty(listQuestionOptionTypes)}" class="inlineList">
 											 	<li th:each="optionTypeId : ${listQuestionOptionTypes}">
-											 		<input type="radio" th:value="${optionTypeId.id}" th:id="${'queOptType'+optionTypeId.id}"/><label th:text="${optionTypeId.quetionOptionTypeName}" th:for="${'queOptType'+optionTypeId.id}" style="margin-right: 3px;"></label>
+											 		<input type="radio" th:value="${optionTypeId.id}" th:id="${'queOptType'+optionTypeId.id}" th:field="*{questionOptionType}"/><label th:text="${optionTypeId.quetionOptionTypeName}" th:for="${'queOptType'+optionTypeId.id}" style="margin-right: 3px;"></label>
 											 	</li>
 											 </ul>
 											 
@@ -145,7 +146,7 @@
 									</div>
 									<div class="col-md-12" th:unless="${#lists.isEmpty(baseItemList)}" style="margin-top: 5px;">
 										<div class="col-md-3" th:each="biObj, start:${baseItemList}">
-											<input type="checkbox" th:value="${biObj.baseItemId}" th:id="${'baseItem'+biObj.baseItemId}" style="margin: 2px;"><label th:text="${biObj.itemName}" th:for="${'baseItem'+biObj.baseItemId}"></label>
+											<input type="checkbox" th:value="${biObj.baseItemId}" th:id="${'baseItem'+biObj.baseItemId}" style="margin: 2px;" th:field="*{listOfAvailableOptions}"><label th:text="${biObj.itemName}" th:for="${'baseItem'+biObj.baseItemId}"></label>
 										</div>
 									</div>
 									

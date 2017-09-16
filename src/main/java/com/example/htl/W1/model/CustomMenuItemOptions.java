@@ -14,8 +14,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name="custom_menu_item_options")
@@ -35,7 +38,7 @@ public class CustomMenuItemOptions {
 	@JoinColumn(name="ref_option_type_id", nullable=false, columnDefinition="int(11)")
 	private QuestionOptionType questionOptionType;
 
-	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@JoinTable(name="custom_menu_item_options_and_base_item_map", 
 			joinColumns = {
 					@JoinColumn(name="ref_custom_menu_item_option_id", nullable=false, referencedColumnName="custom_menu_item_option_id", columnDefinition="int(11)", foreignKey=@ForeignKey(name="fk_tbl_custom_menu_item_option_id"))
@@ -46,7 +49,7 @@ public class CustomMenuItemOptions {
 	)
 	private Set<BaseItem> listOfAvailableOptions;
 
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name="ref_custom_menu_item", nullable=false, columnDefinition="int(11)")
 	private CustomMenuItem customMenuItemObj;
 	
@@ -80,6 +83,14 @@ public class CustomMenuItemOptions {
 
 	public void setListOfAvailableOptions(Set<BaseItem> listOfAvailableOptions) {
 		this.listOfAvailableOptions = listOfAvailableOptions;
+	}
+
+	public CustomMenuItem getCustomMenuItemObj() {
+		return customMenuItemObj;
+	}
+
+	public void setCustomMenuItemObj(CustomMenuItem customMenuItemObj) {
+		this.customMenuItemObj = customMenuItemObj;
 	}
 	
 	

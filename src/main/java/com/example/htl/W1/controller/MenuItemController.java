@@ -1,6 +1,8 @@
 package com.example.htl.W1.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.htl.W1.model.BaseItem;
 import com.example.htl.W1.model.CustomMenuItem;
+import com.example.htl.W1.model.CustomMenuItemOptions;
 import com.example.htl.W1.model.FixedMenuItems;
 import com.example.htl.W1.model.ItemType;
 import com.example.htl.W1.model.Menu;
@@ -240,7 +243,8 @@ public class MenuItemController {
 	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.POST)
 	public ModelAndView generateMenuAddUpdate(@ModelAttribute("menuGenerate") Menu menuObj, 
 												@ModelAttribute("changeMenuType") boolean changeMenuType,
-												@ModelAttribute("itemTypeSelected") String itemTypeSelected){
+												@ModelAttribute("itemTypeSelected") String itemTypeSelected,
+												@ModelAttribute("custMenuItemOptionsObj") CustomMenuItemOptions custMenuItemOptionsObj){
 		ModelAndView modelAndView = new ModelAndView();
 
 		if(itemTypeSelected != null
@@ -256,6 +260,11 @@ public class MenuItemController {
 		List<QuestionOptionType> listQuestionOptionTypes = questionOptionTypeService.getByAll();
 		modelAndView.addObject("listQuestionOptionTypes", listQuestionOptionTypes);
 		
+		if(custMenuItemOptionsObj == null){
+			custMenuItemOptionsObj = new CustomMenuItemOptions();
+		}
+		modelAndView.addObject("custMenuItemOptionsObj", custMenuItemOptionsObj);
+		
 		System.out.println("changeMenuType :: "+changeMenuType);
 		 
 		List<MenuType> menuTypeList = menuTypeService.getByAll();
@@ -265,7 +274,7 @@ public class MenuItemController {
 		modelAndView.addObject("itemTypeList", itemTypeList);
 		
 		if(changeMenuType){
-			if(menuObj.getMenuType().getMenuTypeId() == 1){
+			/*if(menuObj.getMenuType().getMenuTypeId() == 1){
 				CustomMenuItem  cmiObj = customMenuItemService.getByMenuItem(menuObj);
 				if(cmiObj != null)
 					customMenuItemService.delete(cmiObj);
@@ -273,7 +282,7 @@ public class MenuItemController {
 				FixedMenuItems  fmiObj = fixedMenuItemService.getByMenuItem(menuObj);
 				if(fmiObj != null)
 					fixedMenuItemService.delete(fmiObj);
-			}
+			}*/
 		}else{
 			if(menuObj.getMenuType().getMenuTypeId() == 1){
 				if(menuObj.getFixedMenuItemObj() != null
@@ -285,11 +294,23 @@ public class MenuItemController {
 				if(menuObj.getCustomMenuItemObj() != null
 						&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
 					menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
-					
-					
-					
 				}	
 			}
+		}
+		
+		//Custom Menu Item Object settting
+		if(custMenuItemOptionsObj != null
+				&& custMenuItemOptionsObj.getQuestionForChoose() != null
+				&& custMenuItemOptionsObj.getQuestionForChoose().trim().length()>0
+				&& custMenuItemOptionsObj.getQuestionOptionType() != null){
+			CustomMenuItem customMenuItemObj = menuObj.getCustomMenuItemObj();
+			Set<CustomMenuItemOptions> listMenuItemQuestions = customMenuItemObj.getMenuItemQuestions();
+			if(listMenuItemQuestions == null){
+				listMenuItemQuestions = new HashSet<>();
+			}
+			listMenuItemQuestions.add(custMenuItemOptionsObj);
+			custMenuItemOptionsObj.setCustomMenuItemObj(customMenuItemObj);
+			customMenuItemObj.setMenuItemQuestions(listMenuItemQuestions);
 		}
 		
 		menuObj = menuService.save(menuObj);

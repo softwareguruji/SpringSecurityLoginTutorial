@@ -26,7 +26,7 @@ public class FixedMenuItems {
 	@Column(name="fixed_menu_description")
 	private String fixedMenuDescription;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.DETACH})
+	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
 	@JoinColumn(name="ref_menu_id", nullable=false, columnDefinition="int(11)", foreignKey=@ForeignKey(name="fk_tbl_fmi_menu_id"), referencedColumnName="menu_id")
 	//@PrimaryKeyJoinColumn(name="ref_menu_id", referencedColumnName="menu_id")
 	private Menu menuItemReference;
