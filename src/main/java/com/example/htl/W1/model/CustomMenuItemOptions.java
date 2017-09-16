@@ -49,8 +49,8 @@ public class CustomMenuItemOptions {
 	)
 	private Set<BaseItem> listOfAvailableOptions;
 
-	@ManyToOne(cascade={CascadeType.ALL})
-	@JoinColumn(name="ref_custom_menu_item", nullable=false, columnDefinition="int(11)")
+	@ManyToOne(fetch=FetchType.EAGER,cascade={CascadeType.ALL})
+	@JoinColumn(name="ref_custom_menu_item_id", nullable=false, columnDefinition="int(11)")
 	private CustomMenuItem customMenuItemObj;
 	
 	public long getCustomMenuItemOptionId() {

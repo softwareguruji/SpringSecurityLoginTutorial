@@ -107,8 +107,53 @@
 							</div>
 							
 							<div th:if="*{customMenuItemObj} != null" class="col-md-12" th:object="${custMenuItemOptionsObj}">
-								<hr />
 								<input type="hidden" th:field="*{customMenuItemObj.customMenuItemId}" ></input>
+
+								<div th:each="mIQObj: *{customMenuItemObj.menuItemQuestions}" th:if="*{not #lists.isEmpty(customMenuItemObj.menuItemQuestions)}">
+									<label th:text="${mIQObj.questionForChoose}"></label>
+									<!-- 
+									<div class="col-md-12">
+										Add new options to choose with it's question...
+										<input type="text" th:field="*{questionForChoose}" placeholder="Question Text"
+												class="form-control" style="width:100%; margin-top: 5px; margin-bottom: 5px;"/>
+									</div>
+									<div class="col-md-12">
+										<div class="col-md-6">
+											<label for="itemType">Select Item Type:</label>
+											<select class="form-control" id="itemType" name="itemTypeSelected" th:object="${itemTypeSelected}" onchange="listByItemType(this.value)">
+											    <option value="-1">Select One</option>
+											    <option 
+											    	th:each="itemTypeObj : ${itemTypeList}" 
+											    	th:value="${itemTypeObj.itemTypeId}" 
+											    	th:text="${itemTypeObj.itemTypeName}"
+											    	th:selected="(${itemTypeObj.itemTypeId} == ${itemTypeSelected})"
+		                                			/>
+											 </select>
+											 <input type="button" value="Show Base Items" class="btn btn-md" onclick="submitForm();"/>
+										</div>
+										<div class="col-md-6" style="display:inline">
+											 <label>Select type of selection providing:</label>
+											 <ul th:if="${not #lists.isEmpty(listQuestionOptionTypes)}" class="inlineList">
+											 	<li th:each="optionTypeId : ${listQuestionOptionTypes}">
+											 		<input type="radio" th:value="${optionTypeId.id}" th:id="${'queOptType'+optionTypeId.id}" th:field="*{questionOptionType}"/><label th:text="${optionTypeId.quetionOptionTypeName}" th:for="${'queOptType'+optionTypeId.id}" style="margin-right: 3px;"></label>
+											 	</li>
+											 </ul>
+											 
+										</div>
+									</div>
+									 
+									<div th:if="${#lists.isEmpty(baseItemList)}">
+										No data found
+									</div>
+									<div class="col-md-12" th:unless="${#lists.isEmpty(baseItemList)}" style="margin-top: 5px;">
+										<div class="col-md-3" th:each="biObj, start:${baseItemList}">
+											<input type="checkbox" th:value="${biObj.baseItemId}" th:id="${'baseItem'+biObj.baseItemId}" style="margin: 2px;" th:field="*{listOfAvailableOptions}"><label th:text="${biObj.itemName}" th:for="${'baseItem'+biObj.baseItemId}"></label>
+										</div>
+									</div>
+									 -->
+									 <hr />									
+								</div>
+								
 								<div id="optionCreator">
 									<div class="col-md-12">
 										Add new options to choose with it's question...

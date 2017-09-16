@@ -1,5 +1,6 @@
 package com.example.htl.W1.controller;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -304,12 +305,12 @@ public class MenuItemController {
 				&& custMenuItemOptionsObj.getQuestionForChoose().trim().length()>0
 				&& custMenuItemOptionsObj.getQuestionOptionType() != null){
 			CustomMenuItem customMenuItemObj = menuObj.getCustomMenuItemObj();
-			Set<CustomMenuItemOptions> listMenuItemQuestions = customMenuItemObj.getMenuItemQuestions();
+			List<CustomMenuItemOptions> listMenuItemQuestions = customMenuItemObj.getMenuItemQuestions();
 			if(listMenuItemQuestions == null){
-				listMenuItemQuestions = new HashSet<>();
+				listMenuItemQuestions = new ArrayList<>();
 			}
-			listMenuItemQuestions.add(custMenuItemOptionsObj);
 			custMenuItemOptionsObj.setCustomMenuItemObj(customMenuItemObj);
+			listMenuItemQuestions.add(custMenuItemOptionsObj);
 			customMenuItemObj.setMenuItemQuestions(listMenuItemQuestions);
 		}
 		

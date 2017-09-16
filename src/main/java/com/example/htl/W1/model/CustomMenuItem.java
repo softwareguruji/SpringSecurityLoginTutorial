@@ -1,6 +1,6 @@
 package com.example.htl.W1.model;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,12 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name="custom_menu_item")
@@ -35,8 +32,9 @@ public class CustomMenuItem {
 	//@PrimaryKeyJoinColumn(name="ref_menu_id", referencedColumnName="menu_id")
 	private Menu menuItemReference;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL})
-	private Set<CustomMenuItemOptions> menuItemQuestions;
+	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="customMenuItemObj")
+	//@JoinColumn(name="ref_custom_menu_item_id")
+	private List<CustomMenuItemOptions> menuItemQuestions;
 	
 	public long getCustomMenuItemId() {
 		return customMenuItemId;
@@ -62,12 +60,13 @@ public class CustomMenuItem {
 		this.menuItemReference = menuItemReference;
 	}
 
-	public Set<CustomMenuItemOptions> getMenuItemQuestions() {
+	public List<CustomMenuItemOptions> getMenuItemQuestions() {
 		return menuItemQuestions;
 	}
 
-	public void setMenuItemQuestions(Set<CustomMenuItemOptions> menuItemQuestions) {
+	public void setMenuItemQuestions(List<CustomMenuItemOptions> menuItemQuestions) {
 		this.menuItemQuestions = menuItemQuestions;
 	}
+
 
 }
