@@ -41,6 +41,11 @@ public class MenuServiceImpl implements MenuService {
 	public List<Menu> getByAll(MenuType menuType) {
 		return menuRepository.findByMenuType(menuType);
 	}
+
+	@Override
+	public Menu getByPK(long menuId) {
+		return menuRepository.findOne(menuId);
+	}
 	
 	
 }

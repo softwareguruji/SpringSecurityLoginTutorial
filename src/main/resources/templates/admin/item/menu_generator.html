@@ -106,11 +106,9 @@
 								
 							</div>
 							
-							<div th:if="*{customMenuItemObj} != null" class="col-md-12" th:object="${custMenuItemOptionsObj}">
-								<input type="hidden" th:field="*{customMenuItemObj.customMenuItemId}" ></input>
 
-								<div th:each="mIQObj: *{customMenuItemObj.menuItemQuestions}" th:if="*{not #lists.isEmpty(customMenuItemObj.menuItemQuestions)}">
-									<label th:text="${mIQObj.questionForChoose}"></label>
+								<div th:each="mIQObj, start: *{customMenuItemObj.menuItemQuestions}" th:if="*{not #lists.isEmpty(customMenuItemObj.menuItemQuestions)}">
+									<label th:text="${start.count+'. '+mIQObj.questionForChoose}"></label>
 									<!-- 
 									<div class="col-md-12">
 										Add new options to choose with it's question...
@@ -153,6 +151,8 @@
 									 -->
 									 <hr />									
 								</div>
+							<div th:if="*{customMenuItemObj} != null" class="col-md-12" th:object="${custMenuItemOptionsObj}">
+								<input type="hidden" th:field="*{customMenuItemObj.customMenuItemId}" ></input>
 								
 								<div id="optionCreator">
 									<div class="col-md-12">

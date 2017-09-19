@@ -82,9 +82,10 @@
 							<td>
 								<form
 									action="#"
-									method="get" 
-									th:action="@{/admin/baseItemEdit}">
+									method="post" 
+									th:action="@{/admin/menuCreate}">
 									<input type="hidden" name="menuId" th:value="${mObj.menuId}"/>
+									<input type="hidden" name="changeMenuType" value="false"/>
 									<button 
 										type="submit"
 										class="btn btn-xs">

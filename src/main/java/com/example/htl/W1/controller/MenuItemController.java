@@ -1,9 +1,7 @@
 package com.example.htl.W1.controller;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -19,12 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.example.htl.W1.model.BaseItem;
 import com.example.htl.W1.model.CustomMenuItem;
 import com.example.htl.W1.model.CustomMenuItemOptions;
-import com.example.htl.W1.model.FixedMenuItems;
 import com.example.htl.W1.model.ItemType;
 import com.example.htl.W1.model.Menu;
 import com.example.htl.W1.model.MenuType;
 import com.example.htl.W1.model.QuestionOptionType;
-import com.example.htl.W1.repository.QuestionOptionTypeRepository;
 import com.example.htl.W1.service.BaseItemService;
 import com.example.htl.W1.service.CustomMenuItemService;
 import com.example.htl.W1.service.FixedMenuItemService;
@@ -32,8 +28,6 @@ import com.example.htl.W1.service.ItemTypeService;
 import com.example.htl.W1.service.MenuService;
 import com.example.htl.W1.service.MenuTypeService;
 import com.example.htl.W1.service.QuestionOptionTypeService;
-
-import ch.qos.logback.core.net.SyslogOutputStream;
 
 @Controller
 public class MenuItemController {
@@ -242,12 +236,19 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.POST)
-	public ModelAndView generateMenuAddUpdate(@ModelAttribute("menuGenerate") Menu menuObj, 
+	public ModelAndView generateMenuAddUpdate(@ModelAttribute("menuId") String menuId,
+												@ModelAttribute("menuGenerate") Menu menuObj, 
 												@ModelAttribute("changeMenuType") boolean changeMenuType,
 												@ModelAttribute("itemTypeSelected") String itemTypeSelected,
 												@ModelAttribute("custMenuItemOptionsObj") CustomMenuItemOptions custMenuItemOptionsObj){
 		ModelAndView modelAndView = new ModelAndView();
 
+		if(menuId != null){
+			menuObj = menuService.getByPK(Long.parseLong(menuId));
+			System.out.println(menuObj.getMenuId());
+		
+		}
+		
 		if(itemTypeSelected != null
 				&& itemTypeSelected.trim().length()>0){
 			ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeSelected));
@@ -313,8 +314,9 @@ public class MenuItemController {
 			listMenuItemQuestions.add(custMenuItemOptionsObj);
 			customMenuItemObj.setMenuItemQuestions(listMenuItemQuestions);
 		}
-		
-		menuObj = menuService.save(menuObj);
+	
+		if(menuId == null)
+			menuObj = menuService.save(menuObj);
 
 		modelAndView.addObject("menuGenerate", menuObj);
 		
@@ -356,6 +358,12 @@ public class MenuItemController {
 		}
 		
 		modelAndView.setViewName("/admin/item/menu_generator_list");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/admin/menuItemEdit", method=RequestMethod.POST)
+	public ModelAndView editViewMenuItem(@ModelAttribute("menuId") String menuId){
+		ModelAndView modelAndView = new ModelAndView();
 		return modelAndView;
 	}
 	

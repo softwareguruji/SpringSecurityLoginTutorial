@@ -10,5 +10,6 @@ public interface MenuService {
 	public Menu save(Menu menuObj);
 	public List<Menu> getByAll();
 	public List<Menu> getByAll(MenuType menuType);
+	public Menu getByPK(long menuId);
 	
 }

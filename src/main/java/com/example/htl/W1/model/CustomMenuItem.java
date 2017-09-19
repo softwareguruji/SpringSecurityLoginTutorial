@@ -32,7 +32,7 @@ public class CustomMenuItem {
 	//@PrimaryKeyJoinColumn(name="ref_menu_id", referencedColumnName="menu_id")
 	private Menu menuItemReference;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="customMenuItemObj")
+	@OneToMany(fetch = FetchType.EAGER, cascade={CascadeType.ALL}, mappedBy="customMenuItemObj")
 	//@JoinColumn(name="ref_custom_menu_item_id")
 	private List<CustomMenuItemOptions> menuItemQuestions;
 	
