@@ -38,7 +38,7 @@ public class CustomMenuItemOptions {
 	@JoinColumn(name="ref_option_type_id", nullable=false, columnDefinition="int(11)")
 	private QuestionOptionType questionOptionType;
 
-	@ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinTable(name="custom_menu_item_options_and_base_item_map", 
 			joinColumns = {
 					@JoinColumn(name="ref_custom_menu_item_option_id", nullable=false, referencedColumnName="custom_menu_item_option_id", columnDefinition="int(11)", foreignKey=@ForeignKey(name="fk_tbl_custom_menu_item_option_id"))

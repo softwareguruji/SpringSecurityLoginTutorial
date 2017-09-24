@@ -243,37 +243,58 @@ public class MenuItemController {
 												@ModelAttribute("custMenuItemOptionsObj") CustomMenuItemOptions custMenuItemOptionsObj){
 		ModelAndView modelAndView = new ModelAndView();
 
-		if(menuId != null){
+		if(menuId != null && !menuId.trim().equals("0")){
+			System.out.println("menuId : "+menuId);
 			menuObj = menuService.getByPK(Long.parseLong(menuId));
-			System.out.println(menuObj.getMenuId());
+			if(menuObj != null)
+				System.out.println(menuObj.getMenuId());
 		
 		}
 		
-		if(itemTypeSelected != null
-				&& itemTypeSelected.trim().length()>0){
-			ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeSelected));
-			List<BaseItem> baseItemList = baseItemService.getByAll(itemTypeObj);
-			modelAndView.addObject("baseItemList", baseItemList);
-			modelAndView.addObject("itemTypeSelected",itemTypeSelected);
-		}else{
-			modelAndView.addObject("itemTypeSelected","");
-		}
-		
-		List<QuestionOptionType> listQuestionOptionTypes = questionOptionTypeService.getByAll();
-		modelAndView.addObject("listQuestionOptionTypes", listQuestionOptionTypes);
-		
-		if(custMenuItemOptionsObj == null){
-			custMenuItemOptionsObj = new CustomMenuItemOptions();
-		}
-		modelAndView.addObject("custMenuItemOptionsObj", custMenuItemOptionsObj);
-		
-		System.out.println("changeMenuType :: "+changeMenuType);
-		 
+		//Fixed or Custom Menu Radio Button
 		List<MenuType> menuTypeList = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", menuTypeList);
 
-		List<ItemType> itemTypeList = itemTypeService.getByAll();
-		modelAndView.addObject("itemTypeList", itemTypeList);
+		//Checking which kind of menu is?
+		if(menuObj != null){
+			if(menuObj.getMenuType().getMenuTypeId() == 1){
+				if(menuObj.getFixedMenuItemObj() != null
+						&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
+					menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
+					
+				}	
+			}else if(menuObj.getMenuType().getMenuTypeId() == 2){
+				if(menuObj.getCustomMenuItemObj() != null
+						&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
+					menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
+				}	
+
+				if(itemTypeSelected != null
+						&& itemTypeSelected.trim().length()>0){
+					ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeSelected));
+					List<BaseItem> baseItemList = baseItemService.getByAll(itemTypeObj);
+					modelAndView.addObject("baseItemList", baseItemList);
+					modelAndView.addObject("itemTypeSelected",itemTypeSelected);
+				}else{
+					modelAndView.addObject("itemTypeSelected","");
+				}
+				
+				List<QuestionOptionType> listQuestionOptionTypes = questionOptionTypeService.getByAll();
+				modelAndView.addObject("listQuestionOptionTypes", listQuestionOptionTypes);
+				
+				if(custMenuItemOptionsObj == null){
+					custMenuItemOptionsObj = new CustomMenuItemOptions();
+				}
+				modelAndView.addObject("custMenuItemOptionsObj", custMenuItemOptionsObj);
+				
+				System.out.println("changeMenuType :: "+changeMenuType);
+				
+				
+				List<ItemType> itemTypeList = itemTypeService.getByAll();
+				modelAndView.addObject("itemTypeList", itemTypeList);
+			}
+		}
+		
 		
 		if(changeMenuType){
 			/*if(menuObj.getMenuType().getMenuTypeId() == 1){
@@ -286,19 +307,22 @@ public class MenuItemController {
 					fixedMenuItemService.delete(fmiObj);
 			}*/
 		}else{
-			if(menuObj.getMenuType().getMenuTypeId() == 1){
-				if(menuObj.getFixedMenuItemObj() != null
-						&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
-					menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
-					
-				}	
-			}else if(menuObj.getMenuType().getMenuTypeId() == 2){
-				if(menuObj.getCustomMenuItemObj() != null
-						&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
-					menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
-				}	
-			}
+			/*if(menuObj != null){
+				if(menuObj.getMenuType().getMenuTypeId() == 1){
+					if(menuObj.getFixedMenuItemObj() != null
+							&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
+						menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
+						
+					}	
+				}else if(menuObj.getMenuType().getMenuTypeId() == 2){
+					if(menuObj.getCustomMenuItemObj() != null
+							&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
+						menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
+					}	
+				}
+			}*/
 		}
+		
 		
 		//Custom Menu Item Object settting
 		if(custMenuItemOptionsObj != null
@@ -315,7 +339,7 @@ public class MenuItemController {
 			customMenuItemObj.setMenuItemQuestions(listMenuItemQuestions);
 		}
 	
-		if(menuId == null)
+		if(menuId == null || menuId.trim().equals("0"))
 			menuObj = menuService.save(menuObj);
 
 		modelAndView.addObject("menuGenerate", menuObj);

@@ -101,14 +101,48 @@
 								<textarea rows="4" 
 									cols="100%" 
 									th:field="*{customMenuItemObj.customizationDescription}" 
-									placeholder="Fill complete Fixed manu display description"
+									placeholder="Fill complete Custom manu display description"
 									class="form-control"></textarea>
 								
 							</div>
-							
-
-								<div th:each="mIQObj, start: *{customMenuItemObj.menuItemQuestions}" th:if="*{not #lists.isEmpty(customMenuItemObj.menuItemQuestions)}">
-									<label th:text="${start.count+'. '+mIQObj.questionForChoose}"></label>
+							<div class="col-md-12">
+								<div th:each="mIQObj, start: *{customMenuItemObj.menuItemQuestions}" 
+										th:if="*{not #lists.isEmpty(customMenuItemObj.menuItemQuestions)}" class="col-md-12" style="border-style: dotted; border-width: 1px; margin-top: 2px; margin-bottom: 2px;">
+										<div class="col-md-10">
+											<div>
+												<label th:text="${start.count+'. '+mIQObj.questionForChoose}"></label>
+											</div>
+											<div>
+												<label th:text="${'Question Type: '+mIQObj.questionOptionType.quetionOptionTypeName}"></label>
+											</div>
+											<div>
+												<div th:if="${#lists.isEmpty(mIQObj.listOfAvailableOptions)}">
+													No data found
+												</div>
+												<div class="col-md-12" th:unless="${#lists.isEmpty(mIQObj.listOfAvailableOptions)}" style="margin-top: 5px;">
+													<div class="col-md-3" th:each="biObj, start:${mIQObj.listOfAvailableOptions}">
+														<label th:text="${biObj.itemName}"></label>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2" style="border-left-width: 1px; border-left-style: dotted;">
+											<div>
+												Move Up
+											</div>
+											<div>
+												Edit
+											</div>
+											<div>
+												Delete
+											</div>
+											<div>
+												Move Down
+											</div>
+										</div>
+								</div>
+							</div>
+									
 									<!-- 
 									<div class="col-md-12">
 										Add new options to choose with it's question...
@@ -149,9 +183,9 @@
 										</div>
 									</div>
 									 -->
-									 <hr />									
-								</div>
-							<div th:if="*{customMenuItemObj} != null" class="col-md-12" th:object="${custMenuItemOptionsObj}">
+									 
+						<div class="col-md-12">
+							<div th:if="*{customMenuItemObj} != null" class="col-md-12" th:object="${custMenuItemOptionsObj}" style="border-style: dotted; border-width: 1px;">
 								<input type="hidden" th:field="*{customMenuItemObj.customMenuItemId}" ></input>
 								
 								<div id="optionCreator">
@@ -201,6 +235,7 @@
 									
 								</div>
 							</div>
+						</div>
 						</div>
 					</div>
 				</div>
