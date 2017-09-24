@@ -236,19 +236,16 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.POST)
-	public ModelAndView generateMenuAddUpdate(@ModelAttribute("menuId") String menuId,
+	public ModelAndView generateMenuAddUpdate(@ModelAttribute("loadForEditmenuId") String loadForEditMenuId,
 												@ModelAttribute("menuGenerate") Menu menuObj, 
 												@ModelAttribute("changeMenuType") boolean changeMenuType,
 												@ModelAttribute("itemTypeSelected") String itemTypeSelected,
 												@ModelAttribute("custMenuItemOptionsObj") CustomMenuItemOptions custMenuItemOptionsObj){
 		ModelAndView modelAndView = new ModelAndView();
 
-		if(menuId != null && !menuId.trim().equals("0")){
-			System.out.println("menuId : "+menuId);
-			menuObj = menuService.getByPK(Long.parseLong(menuId));
-			if(menuObj != null)
-				System.out.println(menuObj.getMenuId());
-		
+		System.out.println("loadForEditmenuId : "+loadForEditMenuId);
+		if(loadForEditMenuId != null && loadForEditMenuId.trim().trim().length()>0 && !loadForEditMenuId.trim().equals("0")){
+			menuObj = menuService.getByPK(Long.parseLong(loadForEditMenuId));
 		}
 		
 		//Fixed or Custom Menu Radio Button
@@ -256,14 +253,14 @@ public class MenuItemController {
 		modelAndView.addObject("menuTypeList", menuTypeList);
 
 		//Checking which kind of menu is?
-		if(menuObj != null){
-			if(menuObj.getMenuType().getMenuTypeId() == 1){
+		if(menuObj != null && menuObj.getMenuType() != null){
+			if(menuObj.getMenuType().getMenuTypeId() == 1){ //For Fixed Menu
 				if(menuObj.getFixedMenuItemObj() != null
 						&& menuObj.getFixedMenuItemObj().getFixedMenuDescription() != null){
 					menuObj.getFixedMenuItemObj().setMenuItemReference(menuObj);
 					
 				}	
-			}else if(menuObj.getMenuType().getMenuTypeId() == 2){
+			}else if(menuObj.getMenuType().getMenuTypeId() == 2){ //For Custom Menu
 				if(menuObj.getCustomMenuItemObj() != null
 						&& menuObj.getCustomMenuItemObj().getCustomizationDescription() != null){
 					menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
@@ -287,7 +284,7 @@ public class MenuItemController {
 				}
 				modelAndView.addObject("custMenuItemOptionsObj", custMenuItemOptionsObj);
 				
-				System.out.println("changeMenuType :: "+changeMenuType);
+				//System.out.println("changeMenuType :: "+changeMenuType);
 				
 				
 				List<ItemType> itemTypeList = itemTypeService.getByAll();
@@ -328,7 +325,9 @@ public class MenuItemController {
 		if(custMenuItemOptionsObj != null
 				&& custMenuItemOptionsObj.getQuestionForChoose() != null
 				&& custMenuItemOptionsObj.getQuestionForChoose().trim().length()>0
-				&& custMenuItemOptionsObj.getQuestionOptionType() != null){
+				&& custMenuItemOptionsObj.getQuestionOptionType() != null
+				&& custMenuItemOptionsObj.getListOfAvailableOptions() != null
+				&& custMenuItemOptionsObj.getListOfAvailableOptions().size()>0){
 			CustomMenuItem customMenuItemObj = menuObj.getCustomMenuItemObj();
 			List<CustomMenuItemOptions> listMenuItemQuestions = customMenuItemObj.getMenuItemQuestions();
 			if(listMenuItemQuestions == null){
@@ -339,8 +338,10 @@ public class MenuItemController {
 			customMenuItemObj.setMenuItemQuestions(listMenuItemQuestions);
 		}
 	
-		if(menuId == null || menuId.trim().equals("0"))
+		if(loadForEditMenuId == null || loadForEditMenuId.trim().length() == 0 || loadForEditMenuId.trim().equals("0")){
 			menuObj = menuService.save(menuObj);
+			menuObj = menuService.getByPK(menuObj.getMenuId());
+		}
 
 		modelAndView.addObject("menuGenerate", menuObj);
 		
