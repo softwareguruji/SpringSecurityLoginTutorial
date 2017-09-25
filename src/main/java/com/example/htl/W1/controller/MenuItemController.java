@@ -328,14 +328,14 @@ public class MenuItemController {
 				&& custMenuItemOptionsObj.getQuestionOptionType() != null
 				&& custMenuItemOptionsObj.getListOfAvailableOptions() != null
 				&& custMenuItemOptionsObj.getListOfAvailableOptions().size()>0){
+			
+			//CustomMenuItem customMenuItemObj = customMenuItemService.getByMenuItem(menuObj);
+			menuObj = menuService.getByPK(menuObj.getMenuId());
 			CustomMenuItem customMenuItemObj = menuObj.getCustomMenuItemObj();
-			List<CustomMenuItemOptions> listMenuItemQuestions = customMenuItemObj.getMenuItemQuestions();
-			if(listMenuItemQuestions == null){
-				listMenuItemQuestions = new ArrayList<>();
-			}
-			custMenuItemOptionsObj.setCustomMenuItemObj(customMenuItemObj);
-			listMenuItemQuestions.add(custMenuItemOptionsObj);
-			customMenuItemObj.setMenuItemQuestions(listMenuItemQuestions);
+			
+			customMenuItemObj.addMenuItemQuestions(custMenuItemOptionsObj);
+			//custMenuItemOptionsObj.setCustomMenuItemObj(customMenuItemObj);
+			modelAndView.addObject("custMenuItemOptionsObj", new CustomMenuItemOptions());
 		}
 	
 		if(loadForEditMenuId == null || loadForEditMenuId.trim().length() == 0 || loadForEditMenuId.trim().equals("0")){

@@ -1,5 +1,6 @@
 package com.example.htl.W1.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -32,9 +33,18 @@ public class CustomMenuItem {
 	//@PrimaryKeyJoinColumn(name="ref_menu_id", referencedColumnName="menu_id")
 	private Menu menuItemReference;
 
-	@OneToMany(fetch = FetchType.EAGER, cascade={CascadeType.ALL}, mappedBy="customMenuItemObj")
+	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="customMenuItemObj")
 	//@JoinColumn(name="ref_custom_menu_item_id")
 	private List<CustomMenuItemOptions> menuItemQuestions;
+	
+	
+	public void addMenuItemQuestions(CustomMenuItemOptions cmiO){
+		if(menuItemQuestions == null){
+			menuItemQuestions = new ArrayList<CustomMenuItemOptions>();
+		}
+		menuItemQuestions.add(cmiO);
+		cmiO.setCustomMenuItemObj(this);
+	}
 	
 	public long getCustomMenuItemId() {
 		return customMenuItemId;
