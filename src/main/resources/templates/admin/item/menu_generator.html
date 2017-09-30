@@ -27,10 +27,15 @@
 		
 	}
 	
-	function submitForm(){
+	function showBaseItems(){
+		document.getElementById('requestType').value='GenerateBaseItemList';
 		document.getElementById('menuGenerate').submit();
-		
 	}
+	
+	function goToListPage(){
+		document.getElementById('menuList').submit();
+	}
+	
 </script>
 <style type="text/css">
 .inlineList {
@@ -49,6 +54,7 @@
 <body>
 	<form id="menuGenerate" autocomplete="off" action="#" th:action="@{/admin/menuCreate}"
 						th:object="${menuGenerate}" method="post" class="form-inline">
+	<input type="hidden" id="requestType" name="requestType" value="Normal" />
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12" style="margin-top: 10px;">
@@ -108,7 +114,7 @@
 							<div class="col-md-12">
 								<div th:each="mIQObj, start: *{customMenuItemObj.menuItemQuestions}" 
 										th:if="*{not #lists.isEmpty(customMenuItemObj.menuItemQuestions)}" class="col-md-12" style="border-style: dotted; border-width: 1px; margin-top: 2px; margin-bottom: 2px;">
-										<div class="col-md-10">
+										<div class="col-md-10" style="border-right-width: 1px; border-right-style: dotted;">
 											<div>
 												<label th:text="${start.count+'. '+mIQObj.questionForChoose}"></label>
 											</div>
@@ -121,12 +127,15 @@
 												</div>
 												<div class="col-md-12" th:unless="${#lists.isEmpty(mIQObj.listOfAvailableOptions)}" style="margin-top: 5px;">
 													<div class="col-md-3" th:each="biObj, start:${mIQObj.listOfAvailableOptions}">
+														<i class="glyphicon glyphicon-record" aria-hidden="true" th:if="${mIQObj.questionOptionType.id}==1"></i>
+														<i class="glyphicon glyphicon-unchecked" aria-hidden="true" th:if="${mIQObj.questionOptionType.id}==2"></i>
+														&nbsp;
 														<label th:text="${biObj.itemName}"></label>
 													</div>
 												</div>
 											</div>
 										</div>
-										<div class="col-md-2" style="border-left-width: 1px; border-left-style: dotted;">
+										<div class="col-md-2">
 											<div>
 												Move Up
 											</div>
@@ -146,7 +155,7 @@
 									
 									 
 						<div class="col-md-12">
-							<div th:if="*{customMenuItemObj} != null" class="col-md-12" th:object="${custMenuItemOptionsObj}" style="border-style: dotted; border-width: 1px;">
+							<div th:if="*{customMenuItemObj.customMenuItemId} != 0" class="col-md-12" th:object="${custMenuItemOptionsObj}" style="border-style: dotted; border-width: 1px;">
 								<!-- <input type="hidden" th:field="*{customMenuItemObj.customMenuItemId}" ></input>  -->
 								
 								<div id="optionCreator">
@@ -167,7 +176,7 @@
 											    	th:selected="(${itemTypeObj.itemTypeId} == ${itemTypeSelected})"
 		                                			/>
 											 </select>
-											 <input type="button" value="Show Base Items" class="btn btn-md" onclick="submitForm();"/>
+											 <input type="button" value="Show Base Items" class="btn btn-md" onclick="showBaseItems();"/>
 										</div>
 										<div class="col-md-6" style="display:inline">
 											 <label>Select type of selection providing:</label>
@@ -203,14 +212,18 @@
 			</div>
 			<div class="col-md-12">
 				<div align="center">
-					<div class="col-md-offset-5 col-md-2">
+					<div class="col-md-offset-4 col-md-3">
 						<input type="submit" value="Save" class="btn btn-default">
 						<input type="reset" value="Reset" class="btn btn-default">
+						<button type="button" class="btn btn-default" onclick="goToListPage();">List Menu Item</button>
 					</div>
 				</div>
 			</div>
 		</div>
+		<div>&nbsp;</div>
 	</div>
 	</form>
+	<form id="menuList" th:action="@{/admin/menuCreatorList}" method="get">
+	</form>	
 </body>
 </html>

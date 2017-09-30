@@ -1,6 +1,5 @@
 package com.example.htl.W1.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -235,16 +234,18 @@ public class MenuItemController {
 		return modelAndView;
 	}
 	
+	//requestType - Normal, LoadForEdit, GenerateBaseItemList
 	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.POST)
-	public ModelAndView generateMenuAddUpdate(@ModelAttribute("loadForEditmenuId") String loadForEditMenuId,
+	public ModelAndView generateMenuAddUpdate(@ModelAttribute("requestType") String requestType,
+												@ModelAttribute("loadForEditmenuId") String loadForEditMenuId,
 												@ModelAttribute("menuGenerate") Menu menuObj, 
-												@ModelAttribute("changeMenuType") boolean changeMenuType,
+												/*@ModelAttribute("changeMenuType") boolean changeMenuType,*/
 												@ModelAttribute("itemTypeSelected") String itemTypeSelected,
 												@ModelAttribute("custMenuItemOptionsObj") CustomMenuItemOptions custMenuItemOptionsObj){
 		ModelAndView modelAndView = new ModelAndView();
 
-		System.out.println("loadForEditmenuId : "+loadForEditMenuId);
-		if(loadForEditMenuId != null && loadForEditMenuId.trim().trim().length()>0 && !loadForEditMenuId.trim().equals("0")){
+		System.out.println("requestType : "+requestType);
+		if(requestType != null && requestType.equals("LoadForEdit")){
 			menuObj = menuService.getByPK(Long.parseLong(loadForEditMenuId));
 		}
 		
@@ -266,16 +267,18 @@ public class MenuItemController {
 					menuObj.getCustomMenuItemObj().setMenuItemReference(menuObj);
 				}	
 
-				if(itemTypeSelected != null
-						&& itemTypeSelected.trim().length()>0){
-					ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeSelected));
-					List<BaseItem> baseItemList = baseItemService.getByAll(itemTypeObj);
-					modelAndView.addObject("baseItemList", baseItemList);
-					modelAndView.addObject("itemTypeSelected",itemTypeSelected);
-				}else{
-					modelAndView.addObject("itemTypeSelected","");
+				if(requestType.equals("GenerateBaseItemList")){
+					if(itemTypeSelected != null
+							&& itemTypeSelected.trim().length()>0){
+						ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeSelected));
+						List<BaseItem> baseItemList = baseItemService.getByAll(itemTypeObj);
+						modelAndView.addObject("baseItemList", baseItemList);
+						modelAndView.addObject("itemTypeSelected",itemTypeSelected);
+					}else{
+						modelAndView.addObject("itemTypeSelected","");
+					}
+					
 				}
-				
 				List<QuestionOptionType> listQuestionOptionTypes = questionOptionTypeService.getByAll();
 				modelAndView.addObject("listQuestionOptionTypes", listQuestionOptionTypes);
 				
@@ -293,7 +296,7 @@ public class MenuItemController {
 		}
 		
 		
-		if(changeMenuType){
+		//if(changeMenuType){
 			/*if(menuObj.getMenuType().getMenuTypeId() == 1){
 				CustomMenuItem  cmiObj = customMenuItemService.getByMenuItem(menuObj);
 				if(cmiObj != null)
@@ -303,7 +306,7 @@ public class MenuItemController {
 				if(fmiObj != null)
 					fixedMenuItemService.delete(fmiObj);
 			}*/
-		}else{
+		//}else{
 			/*if(menuObj != null){
 				if(menuObj.getMenuType().getMenuTypeId() == 1){
 					if(menuObj.getFixedMenuItemObj() != null
@@ -318,7 +321,7 @@ public class MenuItemController {
 					}	
 				}
 			}*/
-		}
+		//}
 		
 		
 		//Custom Menu Item Object settting
@@ -336,12 +339,13 @@ public class MenuItemController {
 			customMenuItemObj.addMenuItemQuestions(custMenuItemOptionsObj);
 			//custMenuItemOptionsObj.setCustomMenuItemObj(customMenuItemObj);
 			modelAndView.addObject("custMenuItemOptionsObj", new CustomMenuItemOptions());
+			modelAndView.addObject("itemTypeSelected","");
 		}
 	
-		if(loadForEditMenuId == null || loadForEditMenuId.trim().length() == 0 || loadForEditMenuId.trim().equals("0")){
+		if(requestType != null && requestType.equals("Normal")){
 			menuObj = menuService.save(menuObj);
-			menuObj = menuService.getByPK(menuObj.getMenuId());
 		}
+		menuObj = menuService.getByPK(menuObj.getMenuId());
 
 		modelAndView.addObject("menuGenerate", menuObj);
 		
