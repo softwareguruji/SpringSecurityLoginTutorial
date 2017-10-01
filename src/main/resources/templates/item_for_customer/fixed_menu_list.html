@@ -7,17 +7,32 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+function order(){
+	
+}
+</script>
 </head>
 <body>
 <div th:include="header :: header-nav"></div>
 <div th:each="fmiObj, start:${fixedMenuItemsList}" class="col-md-12" style="margin-top: 25px;">
 	<div class="col-md-11">
 		<div th:utext="${fmiObj.fixedMenuDescription}"></div>
-		<div th:text="'$ '+${fmiObj.price}"></div>
+		<div>
+			<span th:text="'$ '+${fmiObj.price}"></span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm">Add</button>
+		</div>
 	</div>
-	<div class="col-md-1">
-		<input type="text" class="form-control" size="3" value="0"></input>
-	</div>
+	<!-- <div class="col-md-1">
+		<button class="btn btn-sm">Add to Cart</button>
+	</div> -->
 </div>
+
+<form id="orderForm" 
+		th:action="@{/addToCart}"
+		th:object="${cartItemObj}" 
+		th:method="post">
+	<input type="text" id="menuId" th:field="*{productCategory}" />
+</form>
+
 </body>
 </html>
