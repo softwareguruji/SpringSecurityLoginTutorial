@@ -78,6 +78,7 @@ public class MenuItemController {
 		BaseItem baseItemObj = new BaseItem();
 		modelAndView.addObject("baseItem", baseItemObj);
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM.getText());
 		modelAndView.setViewName("/admin/item/base_item");
 		return modelAndView;
 	}
@@ -110,7 +111,7 @@ public class MenuItemController {
 		List<ItemType> itemTypeList = itemTypeService.getByAll();
 		modelAndView.addObject("itemTypeList", itemTypeList);
 		
-		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM.getText());
 		modelAndView.setViewName("/admin/item/base_item");
 		return modelAndView;
 	}
@@ -128,6 +129,7 @@ public class MenuItemController {
 		BaseItem baseItemObj = baseItemService.getById(Long.parseLong(baseItemId));
 		modelAndView.addObject("baseItem", baseItemObj);
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM.getText());
 		modelAndView.setViewName("/admin/item/base_item");
 		return modelAndView;
 	}
@@ -148,6 +150,7 @@ public class MenuItemController {
 		baseItemObj = new BaseItem();
 		modelAndView.addObject("baseItem", baseItemObj);
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM.getText());
 		modelAndView.setViewName("/admin/item/base_item");
 		return modelAndView;
 	}
@@ -161,7 +164,8 @@ public class MenuItemController {
 		
 		List<ItemType> itemTypeList = itemTypeService.getByAll();
 		modelAndView.addObject("itemTypeList", itemTypeList);
-		
+
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM_TYPE.getText());
 		modelAndView.setViewName("/admin/item/item_type");
 		return modelAndView;
 	}
@@ -184,6 +188,7 @@ public class MenuItemController {
 			modelAndView.addObject("itemType", itemTypeObj);
 		}
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM_TYPE.getText());
 		modelAndView.setViewName("/admin/item/item_type");
 		return modelAndView;
 	}
@@ -202,6 +207,7 @@ public class MenuItemController {
 		ItemType itemTypeObj1 = new ItemType();
 		modelAndView.addObject("itemType", itemTypeObj1);
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM_TYPE.getText());
 		modelAndView.setViewName("/admin/item/item_type");
 		return modelAndView;
 	}
@@ -215,7 +221,8 @@ public class MenuItemController {
 		
 		List<ItemType> itemTypeList = itemTypeService.getByAll();
 		modelAndView.addObject("itemTypeList", itemTypeList);
-		
+
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.MANAGE_ITEM_TYPE.getText());
 		modelAndView.setViewName("/admin/item/item_type");
 		return modelAndView;
 	}
@@ -229,7 +236,8 @@ public class MenuItemController {
 		
 		Menu menuObj = new Menu();
 		modelAndView.addObject("menuGenerate", menuObj);
-		
+
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.ADD_MENU.getText());
 		modelAndView.setViewName("/admin/item/menu_generator");
 		return modelAndView;
 	}
@@ -349,6 +357,7 @@ public class MenuItemController {
 
 		modelAndView.addObject("menuGenerate", menuObj);
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.ADD_MENU.getText());
 		modelAndView.setViewName("/admin/item/menu_generator");
 		return modelAndView;
 	}
@@ -363,6 +372,7 @@ public class MenuItemController {
 		List<Menu> listMenu = menuService.getByAll();
 		modelAndView.addObject("menuList", listMenu);
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.LIST_MENU.getText());
 		modelAndView.setViewName("/admin/item/menu_generator_list");
 		return modelAndView;
 	}
@@ -386,14 +396,8 @@ public class MenuItemController {
 			modelAndView.addObject("menuList", listMenu);
 		}
 		
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.LIST_MENU.getText());
 		modelAndView.setViewName("/admin/item/menu_generator_list");
 		return modelAndView;
 	}
-	
-	@RequestMapping(value="/admin/menuItemEdit", method=RequestMethod.POST)
-	public ModelAndView editViewMenuItem(@ModelAttribute("menuId") String menuId){
-		ModelAndView modelAndView = new ModelAndView();
-		return modelAndView;
-	}
-	
 }

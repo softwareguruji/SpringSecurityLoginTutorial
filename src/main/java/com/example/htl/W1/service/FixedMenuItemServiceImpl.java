@@ -36,5 +36,10 @@ public class FixedMenuItemServiceImpl implements FixedMenuItemService {
 	public void delete(FixedMenuItems fixedMenuItem) {
 		fixedMenuItemRepository.delete(fixedMenuItem);
 	}
+
+	@Override
+	public List<FixedMenuItems> getByAll() {
+		return fixedMenuItemRepository.findAll();
+	}
 	
 }

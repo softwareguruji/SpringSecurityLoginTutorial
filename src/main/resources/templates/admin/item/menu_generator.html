@@ -52,6 +52,7 @@
 </style>
 </head>
 <body>
+<div th:include="header :: header-nav"></div>
 	<form id="menuGenerate" autocomplete="off" action="#" th:action="@{/admin/menuCreate}"
 						th:object="${menuGenerate}" method="post" class="form-inline">
 	<input type="hidden" id="requestType" name="requestType" value="Normal" />
@@ -94,6 +95,9 @@
 									placeholder="Fill complete Fixed manu display description"
 									class="form-control"></textarea>
 								
+							</div>
+							<div class="col-md-12" style="margin-top: 5px;">
+								Set Price : <input type="text" class="form-control" size="4" th:field="*{fixedMenuItemObj.price}" /> $
 							</div>
 						</div>
 					</div>

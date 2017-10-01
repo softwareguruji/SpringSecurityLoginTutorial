@@ -35,4 +35,9 @@ public class CustomMenuItemServiceImpl implements CustomMenuItemService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<CustomMenuItem> getByAll() {
+		return customMenuItemRepository.findAll();
+	}
 }
