@@ -1,5 +1,6 @@
 package com.example.htl.W1.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.InternalResourceView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.htl.W1.model.Cart;
 import com.example.htl.W1.model.CartItem;
@@ -16,6 +19,7 @@ import com.example.htl.W1.model.CustomMenuItem;
 import com.example.htl.W1.model.FixedMenuItems;
 import com.example.htl.W1.service.CustomMenuItemService;
 import com.example.htl.W1.service.FixedMenuItemService;
+import com.example.htl.W1.service.MenuService;
 
 @Controller
 public class MenuCustomerController {
@@ -25,9 +29,12 @@ public class MenuCustomerController {
 
 	@Autowired
 	CustomMenuItemService customMenuItemService;
+
+	@Autowired
+	MenuService menuService;
 	
-	@Autowired 
-	@Qualifier("cart")
+	/*@Autowired 
+	@Qualifier("cart")*/
 	private Cart cartObject;
 	
 	@RequestMapping(value={"/", "/fixedMenuList"}, method = RequestMethod.GET)
@@ -56,29 +63,42 @@ public class MenuCustomerController {
 	}
 	
 	@RequestMapping(value="/addToCart", method = RequestMethod.POST)
-	public ModelAndView addToCart(@ModelAttribute("cartItemObj") CartItem cartItemObj){
+	public ModelAndView addToCart(@ModelAttribute("menuId") String menuId){
 		ModelAndView modelAndView = new ModelAndView();
 		
 		if(cartObject == null){
 			cartObject = new Cart();
 		}
 		
-		/*List<CartItem> cartItems = cartObject.getCartItems();
+		System.out.println("Menu Id: "+menuId);
+		List<CartItem> cartItems = cartObject.getCartItems();
 		
 		boolean alreadyAddedSameMenuItem = false;
+		
+		if(cartItems == null){
+			cartItems = new ArrayList<>();
+			cartObject.setCartItems(cartItems);
+		}
+		System.out.println("Cart Size : "+cartObject.getCartItems().size());
+		
 		for (CartItem cartItem : cartItems) {
-			if(cartItem.getMenuId().equals(cartItemObj.getMenuId())){
+			if(cartItem.getMenuId().equals(menuId)){
 				cartItem.setQuantity(cartItem.getQuantity()+1);
 				alreadyAddedSameMenuItem = true;
 			}
 		}
 		
 		if(!alreadyAddedSameMenuItem){
+			CartItem cartItemObj = new CartItem(); 
 			cartItemObj.setQuantity(1);
+			cartItemObj.setMenuId(menuService.getByPK(Long.parseLong(menuId)));
 			cartObject.getCartItems().add(cartItemObj);
-		}*/
+		}
 		
-		modelAndView.setViewName("/item_for_customer/customize_menu_list");
+		RedirectView redirectView = new RedirectView("/fixedMenuList");
+		modelAndView.addObject("cartObject", cartObject);
+		//modelAndView.setViewName("/item_for_customer/fixed_menu_list");
+		modelAndView.setView(redirectView);
 		return modelAndView;
 	}
 

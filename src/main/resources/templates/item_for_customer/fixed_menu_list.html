@@ -8,8 +8,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script>
-function order(){
-	
+function order(menuId){
+	alert(menuId);
+	document.getElementById('menuId').value=menuId;
+	document.getElementById('orderForm').submit();
 }
 </script>
 </head>
@@ -19,7 +21,7 @@ function order(){
 	<div class="col-md-11">
 		<div th:utext="${fmiObj.fixedMenuDescription}"></div>
 		<div>
-			<span th:text="'$ '+${fmiObj.price}"></span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm">Add</button>
+			<span th:text="'$ '+${fmiObj.price}"></span>&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm" th:onclick="'order(\''+${fmiObj.menuItemReference.menuId}+'\');'">Add</button>
 		</div>
 	</div>
 	<!-- <div class="col-md-1">
@@ -29,9 +31,8 @@ function order(){
 
 <form id="orderForm" 
 		th:action="@{/addToCart}"
-		th:object="${cartItemObj}" 
 		th:method="post">
-	<input type="text" id="menuId" th:field="*{productCategory}" />
+	<input type="hidden" id="menuId" name="menuId" />
 </form>
 
 </body>

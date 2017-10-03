@@ -39,7 +39,9 @@
         <li>
         	<a href="#">
         		Cart
-        		<span class="badge badge-secondary" th:text="${session.Cart.cartItems.length}" th:unless="${session == null}">0</span>
+        		<!-- <span class="badge badge-secondary">10</span> -->
+        		<span class="badge badge-secondary" th:text="${#lists.size(cartObject.cartItems)}" th:if="${cartObject} != null">0</span> 
+        		<!-- <span class="badge badge-secondary" th:text="${cartObject.cartItems)}" th:unless="${cartObject} == null">0</span> -->
         	</a>
         </li>
         <li><a href="#">Login</a></li>
