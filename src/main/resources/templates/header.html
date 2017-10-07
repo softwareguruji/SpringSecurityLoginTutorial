@@ -36,17 +36,14 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
+        <li th:unless="${cartItemsCount} == null">
         	<a href="#">
-        		Cart
-        		<!-- <span class="badge badge-secondary">10</span> -->
-        		<span class="badge badge-secondary" th:text="${#lists.size(cartObject.cartItems)}" th:if="${cartObject} != null">0</span> 
-        		<!-- <span class="badge badge-secondary" th:text="${cartObject.cartItems)}" th:unless="${cartObject} == null">0</span> -->
+        		Cart (<span th:text="${cartItemsCount}"></span>)
         	</a>
         </li>
-        <li><a href="#">Login</a></li>
+        <li th:if="${username} == null"><a href="/login">Login</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">User Name <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" th:unless="${username} == null"><span th:text="${username}">User Name</span> <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">Profile</a></li>
             <li><a href="#">Ordered Item</a></li>
