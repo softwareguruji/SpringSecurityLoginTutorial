@@ -1,5 +1,7 @@
 package com.example.htl.W1.model;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -36,6 +39,17 @@ public class CartItem {
 	@JoinColumn(name="ref_order_id", nullable=false, columnDefinition="int(11)")
 	private Order order;
 	
+	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="refCartItem")
+	List<CustomMenuCartItemSelection> customCartItemSelections;
+	
+	public List<CustomMenuCartItemSelection> getCustomCartItemSelections() {
+		return customCartItemSelections;
+	}
+
+	public void setCustomCartItemSelections(List<CustomMenuCartItemSelection> customCartItemSelections) {
+		this.customCartItemSelections = customCartItemSelections;
+	}
+
 	public long getCartItemId() {
 		return cartItemId;
 	}

@@ -24,10 +24,9 @@ import com.example.htl.W1.service.FixedMenuItemService;
 import com.example.htl.W1.service.MenuService;
 import com.example.htl.W1.service.OrderService;
 import com.example.model.User;
-import com.example.service.UserService;
 
 @Controller
-public class MenuCustomerController {
+public class MenuCustomerController extends BaseController{
 
 	@Autowired
 	FixedMenuItemService fixedMenuItemService;
@@ -38,41 +37,24 @@ public class MenuCustomerController {
 	@Autowired
 	MenuService menuService;
 	
-	@Autowired
-	UserService userService;
+	/*@Autowired
+	UserService userService;*/
 
-	@Autowired
-	OrderService orderService;
+	/*@Autowired
+	OrderService orderService;*/
 
 	@Autowired
 	CartItemService cartItemService;
-	
-	/*@Autowired 
-	@Qualifier("cart")*/
-	/*private Cart cartObject;*/
 	
 	@RequestMapping(value={"/", "/fixedMenuList"}, method = RequestMethod.GET)
 	public ModelAndView fixedMenuListShow(Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
 
+		setupBaseParameter(modelAndView, principal); 
+		
 		List<FixedMenuItems> fixedMenuItemsList = fixedMenuItemService.getByAll();
 		modelAndView.addObject("fixedMenuItemsList", fixedMenuItemsList);
 		modelAndView.addObject("activeHeaderMenu", HeaderLinks.FIXED_MENU_ITEM.getText());
-		
-		//Adding UserName and Cart Item
-		if(principal != null){
-			modelAndView.addObject("username",principal.getName());
-			User userObj = userService.findUserByEmail(principal.getName());
-			List<Order> listOrders = orderService.findUnOrderedCartItemsByUser(userObj);
-			int cartItemsCount = 0;
-			if(listOrders != null && !listOrders.isEmpty()){
-				Order orderObj = listOrders.get(0);
-				for (CartItem cartItem : orderObj.getCartItems()) {
-					cartItemsCount += cartItem.getQuantity();
-				}
-			}
-			modelAndView.addObject("cartItemsCount", cartItemsCount);
-		}
 		
 		modelAndView.setViewName("/item_for_customer/fixed_menu_list");
 		return modelAndView;
@@ -82,25 +64,11 @@ public class MenuCustomerController {
 	public ModelAndView customMenuListShow(Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
 
+		setupBaseParameter(modelAndView, principal); 
+		
 		List<CustomMenuItem> customizedMenuItemsList = customMenuItemService.getByAll();
 		modelAndView.addObject("customMenuItemsList", customizedMenuItemsList);
 		modelAndView.addObject("activeHeaderMenu", HeaderLinks.CUSTOM_MENU_ITEM.getText());
-		
-		//Adding UserName and Cart Item
-		if(principal != null){
-			modelAndView.addObject("username",principal.getName());
-			User userObj = userService.findUserByEmail(principal.getName());
-			List<Order> listOrders = orderService.findUnOrderedCartItemsByUser(userObj);
-			int cartItemsCount = 0;
-			if(listOrders != null && !listOrders.isEmpty()){
-				Order orderObj = listOrders.get(0);
-				for (CartItem cartItem : orderObj.getCartItems()) {
-					cartItemsCount += cartItem.getQuantity();
-				}
-			}
-			modelAndView.addObject("cartItemsCount", cartItemsCount);
-		}
-		
 		
 		modelAndView.setViewName("/item_for_customer/customize_menu_list");
 		return modelAndView;
@@ -109,35 +77,6 @@ public class MenuCustomerController {
 	@RequestMapping(value="/addToCart", method = RequestMethod.POST)
 	public ModelAndView addToCart(Principal principal, @ModelAttribute("menuId") String menuId){
 		ModelAndView modelAndView = new ModelAndView();
-		
-		/*if(cartObject == null){
-			cartObject = new Cart();
-		}*/
-		
-		/*System.out.println("Menu Id: "+menuId);
-		List<CartItem> cartItems = cartObject.getCartItems();
-		
-		boolean alreadyAddedSameMenuItem = false;
-		
-		if(cartItems == null){
-			cartItems = new ArrayList<>();
-			cartObject.setCartItems(cartItems);
-		}
-		System.out.println("Cart Size : "+cartObject.getCartItems().size());
-		
-		for (CartItem cartItem : cartItems) {
-			if(cartItem.getMenuId().equals(menuId)){
-				cartItem.setQuantity(cartItem.getQuantity()+1);
-				alreadyAddedSameMenuItem = true;
-			}
-		}*/
-		
-		/*if(!alreadyAddedSameMenuItem){
-			CartItem cartItemObj = new CartItem(); 
-			cartItemObj.setQuantity(1);
-			cartItemObj.setMenuId(menuService.getByPK(Long.parseLong(menuId)));
-			cartObject.getCartItems().add(cartItemObj);
-		}*/
 		
 		User userObj = userService.findUserByEmail(principal.getName());
 		
@@ -191,22 +130,13 @@ public class MenuCustomerController {
 			orderService.saveNewOrder(order);
 		}
 		
-		modelAndView.addObject("username",principal.getName());
+		//modelAndView.addObject("username",principal.getName());
 		
 		RedirectView redirectView = new RedirectView("/fixedMenuList");
-		//modelAndView.addObject("cartObject", cartObject);
-		//modelAndView.setViewName("/item_for_customer/fixed_menu_list");
 		modelAndView.setView(redirectView);
 		return modelAndView;
 	}
 
-	/*public Cart getCartObject() {
-		return cartObject;
-	}
-
-	public void setCartObject(Cart cartObject) {
-		this.cartObject = cartObject;
-	}*/
 	
 	
 	

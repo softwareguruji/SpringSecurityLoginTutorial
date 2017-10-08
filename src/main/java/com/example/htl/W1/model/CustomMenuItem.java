@@ -35,7 +35,6 @@ public class CustomMenuItem {
 	@OneToMany(fetch = FetchType.LAZY, cascade={CascadeType.ALL}, mappedBy="customMenuItemObj")
 	private List<CustomMenuItemOptions> menuItemQuestions;
 	
-	
 	public void addMenuItemQuestions(CustomMenuItemOptions cmiO){
 		if(menuItemQuestions == null){
 			menuItemQuestions = new ArrayList<CustomMenuItemOptions>();

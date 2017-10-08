@@ -1,5 +1,6 @@
 package com.example.htl.W1.controller;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -27,9 +28,10 @@ import com.example.htl.W1.service.ItemTypeService;
 import com.example.htl.W1.service.MenuService;
 import com.example.htl.W1.service.MenuTypeService;
 import com.example.htl.W1.service.QuestionOptionTypeService;
+import com.example.model.User;
 
 @Controller
-public class MenuItemController {
+public class MenuItemController extends BaseController{
 
 	@Autowired
 	ItemTypeService itemTypeService;
@@ -53,9 +55,11 @@ public class MenuItemController {
 	MenuTypeService menuTypeService;
 	
 	@RequestMapping(value="/admin/baseItem", method = RequestMethod.GET)
-	public ModelAndView baseItem(@ModelAttribute("itemTypeSelected") String itemTypeSelected){
+	public ModelAndView baseItem(Principal principal, @ModelAttribute("itemTypeSelected") String itemTypeSelected){
 		ModelAndView modelAndView = new ModelAndView();
 
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
 		System.out.println("itemTypeId: "+itemTypeSelected);
 		if(itemTypeSelected != null
 				&& itemTypeSelected.trim().length()>0
@@ -84,10 +88,11 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/baseItemAdd", method = RequestMethod.POST)
-	public ModelAndView baseItemAdd(@ModelAttribute("baseItem") @Validated BaseItem baseItemObj, BindingResult resultBunding){
+	public ModelAndView baseItemAdd(Principal principal, @ModelAttribute("baseItem") @Validated BaseItem baseItemObj, BindingResult resultBunding){
 		ModelAndView modelAndView = new ModelAndView();
 
-
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
 		//Validation with the for the same item already available or not.
 		if(baseItemService.getByItemNameAndItemType(baseItemObj) != null){
 			resultBunding.rejectValue("itemName", 
@@ -117,8 +122,10 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/baseItemEdit", method = RequestMethod.GET)
-	public ModelAndView baseItemEdit(@ModelAttribute("baseItemId") String baseItemId){
+	public ModelAndView baseItemEdit(Principal principal, @ModelAttribute("baseItemId") String baseItemId){
 		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
 		
 		List<BaseItem> baseItemList = baseItemService.getByAll();
 		modelAndView.addObject("baseItemList", baseItemList);
@@ -135,8 +142,10 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/baseItemDelete", method = RequestMethod.GET)
-	public ModelAndView baseItemDelete(@ModelAttribute("baseItemId") String baseItemId){
+	public ModelAndView baseItemDelete(Principal principal, @ModelAttribute("baseItemId") String baseItemId){
 		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
 		
 		List<BaseItem> baseItemList = baseItemService.getByAll();
 		modelAndView.addObject("baseItemList", baseItemList);
@@ -156,8 +165,10 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/itemType", method = RequestMethod.GET)
-	public ModelAndView itemType(){
+	public ModelAndView itemType(Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
 		
 		ItemType itemTypeObj = new ItemType();
 		modelAndView.addObject("itemType", itemTypeObj);
@@ -171,8 +182,10 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/itemType", method = RequestMethod.POST)
-	public ModelAndView itemTypeAdd(@ModelAttribute("itemType") @Valid ItemType itemTypeObj, BindingResult bindingResult){
+	public ModelAndView itemTypeAdd(Principal principal, @ModelAttribute("itemType") @Valid ItemType itemTypeObj, BindingResult bindingResult){
 		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
 		
 		List<ItemType> itemTypeList = itemTypeService.getByAll();
 		modelAndView.addObject("itemTypeList", itemTypeList);
@@ -194,9 +207,11 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/itemTypeDelete", method = RequestMethod.GET)
-	public ModelAndView itemTypeDelete(@ModelAttribute("itemTypeId") String itemTypeId){
+	public ModelAndView itemTypeDelete(Principal principal, @ModelAttribute("itemTypeId") String itemTypeId){
 		ModelAndView modelAndView = new ModelAndView();
 
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
 		ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeId));
 		
 		itemTypeService.deleteItemType(itemTypeObj);
@@ -213,9 +228,11 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/itemTypeEdit", method = RequestMethod.GET)
-	public ModelAndView itemTypeEditView(@ModelAttribute("itemTypeId") String itemTypeId){
+	public ModelAndView itemTypeEditView(Principal principal, @ModelAttribute("itemTypeId") String itemTypeId){
 		ModelAndView modelAndView = new ModelAndView();
 
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
 		ItemType itemTypeObj = itemTypeService.getById(Long.parseLong(itemTypeId));
 		modelAndView.addObject("itemType", itemTypeObj);
 		
@@ -228,9 +245,11 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.GET)
-	public ModelAndView generateMenu(){
+	public ModelAndView generateMenu(Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
 
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
 		List<MenuType> menuTypeList = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", menuTypeList);
 		
@@ -244,7 +263,8 @@ public class MenuItemController {
 	
 	//requestType - Normal, LoadForEdit, GenerateBaseItemList
 	@RequestMapping(value="/admin/menuCreate", method= RequestMethod.POST)
-	public ModelAndView generateMenuAddUpdate(@ModelAttribute("requestType") String requestType,
+	public ModelAndView generateMenuAddUpdate(Principal principal,
+												@ModelAttribute("requestType") String requestType,
 												@ModelAttribute("loadForEditmenuId") String loadForEditMenuId,
 												@ModelAttribute("menuGenerate") Menu menuObj, 
 												/*@ModelAttribute("changeMenuType") boolean changeMenuType,*/
@@ -252,6 +272,8 @@ public class MenuItemController {
 												@ModelAttribute("custMenuItemOptionsObj") CustomMenuItemOptions custMenuItemOptionsObj){
 		ModelAndView modelAndView = new ModelAndView();
 
+		User userObj = setupBaseParameter(modelAndView, principal);
+		
 		System.out.println("requestType : "+requestType);
 		if(requestType != null && requestType.equals("LoadForEdit")){
 			menuObj = menuService.getByPK(Long.parseLong(loadForEditMenuId));
@@ -363,8 +385,10 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/menuCreatorList", method=RequestMethod.GET)
-	public ModelAndView listGeneratorMenu(){
+	public ModelAndView listGeneratorMenu(Principal principal){
 		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
 		
 		List<MenuType> listMenuType = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", listMenuType);
@@ -378,8 +402,10 @@ public class MenuItemController {
 	}
 	
 	@RequestMapping(value="/admin/menuCreatorList", method=RequestMethod.POST)
-	public ModelAndView listGeneratorMenu(@ModelAttribute("menuTypeSelected") String menuType){
+	public ModelAndView listGeneratorMenu(Principal principal, @ModelAttribute("menuTypeSelected") String menuType){
 		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
 		
 		List<MenuType> listMenuType = menuTypeService.getByAll();
 		modelAndView.addObject("menuTypeList", listMenuType);
