@@ -1,5 +1,6 @@
 package com.example.htl.W1.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,6 +18,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 
@@ -48,6 +50,10 @@ public class CustomMenuItemOptions {
 			}
 	)
 	private Set<BaseItem> listOfAvailableOptions;
+	
+	//There is no db link up here. This is just to hold the object.
+	@Transient
+	private Set<Long> listOfSelectedOptions = new HashSet<>();
 
 	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
 	@JoinColumn(name="ref_custom_menu_item_id", nullable=false, columnDefinition="int(11)")
@@ -92,7 +98,16 @@ public class CustomMenuItemOptions {
 	public void setCustomMenuItemObj(CustomMenuItem customMenuItemObj) {
 		this.customMenuItemObj = customMenuItemObj;
 	}
-	
+
+	public Set<Long> getListOfSelectedOptions() {
+		return listOfSelectedOptions;
+	}
+
+	public void setListOfSelectedOptions(Set<Long> listOfSelectedOptions) {
+		this.listOfSelectedOptions = listOfSelectedOptions;
+	}
+
+		
 	
 	
 }

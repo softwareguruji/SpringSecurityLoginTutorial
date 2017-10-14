@@ -11,4 +11,5 @@ public interface CustomMenuItemService {
 	void delete(CustomMenuItem customMenuItemObj);
 	CustomMenuItem getByMenuItem(Menu menuObj);
 	List<CustomMenuItem> getByAll();
+	CustomMenuItem getByCustomMenuItemId(Long customMenuItemId);
 }
