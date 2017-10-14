@@ -20,15 +20,15 @@ public class CustomMenuCartItemSelection {
 	@Column(name = "cust_menu_cart_item_selection_id", columnDefinition="int(11)")
 	private long customMenuCartItemSelectionID;
 	
-	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
+	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.PERSIST})
 	@JoinColumn(name="ref_cart_item_id", nullable=false, columnDefinition="int(11)")
 	private CartItem refCartItem;
 	
-	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
+	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.PERSIST})
 	@JoinColumn(name="ref_custom_menu_item_option_id", nullable=false, columnDefinition="int(11)")
 	private CustomMenuItemOptions refCustomMenuItemOption;
 	
-	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
+	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.PERSIST})
 	@JoinColumn(name="ref_base_item_selection_id", nullable=false, columnDefinition="int(11)")
 	private BaseItem refSelectionBaseItem;
 	

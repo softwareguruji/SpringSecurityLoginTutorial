@@ -35,7 +35,7 @@ public class CartItem {
 	private double price;
 
 	
-	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.ALL})
+	@ManyToOne(fetch=FetchType.LAZY,cascade={CascadeType.PERSIST})
 	@JoinColumn(name="ref_order_id", nullable=false, columnDefinition="int(11)")
 	private Order order;
 	

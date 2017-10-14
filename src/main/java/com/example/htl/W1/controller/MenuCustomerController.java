@@ -159,7 +159,7 @@ public class MenuCustomerController extends BaseController{
 	}
 	
 	@RequestMapping(value="/addToCartCustom", method = RequestMethod.POST)
-	public ModelAndView addToCartCustom1(Principal principal, @ModelAttribute("menuId") String menuId, HttpServletRequest request){
+	public ModelAndView addToCartCustom(Principal principal, @ModelAttribute("menuId") String menuId, HttpServletRequest request){
 		ModelAndView modelAndView = new ModelAndView();
 		
 		System.out.println("menuId: "+menuId);
@@ -242,5 +242,75 @@ public class MenuCustomerController extends BaseController{
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/showCart", method = RequestMethod.GET)
+	public ModelAndView showCart(Principal principal){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
+		List<Order> unorderList = orderService.findUnOrderedCartItemsByUser(userObj);
+		
+		
+		if(unorderList != null && !unorderList.isEmpty()){
+			double grandTotalPrice = 0.0f;
+			
+			for (CartItem cartItem : unorderList.get(0).getCartItems()) {
+				grandTotalPrice += (cartItem.getPrice() * cartItem.getQuantity());
+			}
+			
+			modelAndView.addObject("grandTotalPrice",grandTotalPrice);
+			modelAndView.addObject("unOrderedOrder",unorderList.get(0));
+		}
+		
+		modelAndView.setViewName("/item_for_customer/show_user_cart");
+		return modelAndView;
+	}
+
+	@RequestMapping(value="/cartItemAddRemoveDelete", method = RequestMethod.POST)
+	public ModelAndView cartItemAddRemoveDelete(Principal principal, 
+												@ModelAttribute("cartItemId") String cartItemId, 
+												@ModelAttribute("type") String type){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if(type != null){
+			if(type.equals("ADD")){
+				CartItem cartItemObj = cartItemService.getById(Long.parseLong(cartItemId));
+				cartItemObj.setQuantity(cartItemObj.getQuantity()+1);
+				cartItemService.save(cartItemObj);
+			}else if(type.equals("REMOVE")){
+				CartItem cartItemObj = cartItemService.getById(Long.parseLong(cartItemId));
+				cartItemObj.setQuantity(cartItemObj.getQuantity()-1);
+				cartItemService.save(cartItemObj);
+			}else if(type.equals("DELETE")){
+				cartItemService.deleteById(Long.parseLong(cartItemId));
+			} 
+		}
+		
+		RedirectView redirectView = new RedirectView("/showCart");
+		modelAndView.setView(redirectView);
+		return modelAndView;
+	}
 	
+	
+	@RequestMapping(value="/orderPlaceCancel", method = RequestMethod.POST)
+	public ModelAndView orderPlaceCancel(Principal principal, 
+												@ModelAttribute("orderId") String orderId, 
+												@ModelAttribute("type") String type){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if(type != null){
+			if(type.equals("PLACE")){
+				/*CartItem cartItemObj = cartItemService.getById(Long.parseLong(cartItemId));
+				cartItemObj.setQuantity(cartItemObj.getQuantity()+1);
+				cartItemService.save(cartItemObj);*/
+			}else if(type.equals("CANCEL")){
+				/*CartItem cartItemObj = cartItemService.getById(Long.parseLong(cartItemId));
+				cartItemObj.setQuantity(cartItemObj.getQuantity()-1);
+				cartItemService.save(cartItemObj);*/
+			} 
+		}
+		
+		RedirectView redirectView = new RedirectView("/showCart");
+		modelAndView.setView(redirectView);
+		return modelAndView;
+	}
 }
