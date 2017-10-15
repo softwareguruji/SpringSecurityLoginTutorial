@@ -8,6 +8,8 @@ import com.example.model.User;
 public interface OrderService {
 
 	List<Order> findUnOrderedCartItemsByUser(User userObj);
+	List<Order> findAllOrderedCartItemsByUser(User userObj);
 	Order saveNewOrder(Order orderObj);
-	
+	Order getById(Long orderId);
+	Order savePlacedOrder(Order orderObj);
 }

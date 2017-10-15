@@ -299,9 +299,8 @@ public class MenuCustomerController extends BaseController{
 		
 		if(type != null){
 			if(type.equals("PLACE")){
-				/*CartItem cartItemObj = cartItemService.getById(Long.parseLong(cartItemId));
-				cartItemObj.setQuantity(cartItemObj.getQuantity()+1);
-				cartItemService.save(cartItemObj);*/
+				Order orderObj = orderService.getById(Long.parseLong(orderId));
+				orderService.savePlacedOrder(orderObj);
 			}else if(type.equals("CANCEL")){
 				/*CartItem cartItemObj = cartItemService.getById(Long.parseLong(cartItemId));
 				cartItemObj.setQuantity(cartItemObj.getQuantity()-1);
@@ -310,6 +309,21 @@ public class MenuCustomerController extends BaseController{
 		}
 		
 		RedirectView redirectView = new RedirectView("/showCart");
+		modelAndView.setView(redirectView);
+		return modelAndView;
+	}
+	
+	
+	@RequestMapping(value="/showOrder", method = RequestMethod.GET)
+	public ModelAndView showOrder(Principal principal){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		User userObj = setupBaseParameter(modelAndView, principal);
+		List<Order> allOrderList = orderService.findAllOrderedCartItemsByUser(userObj);
+		
+		modelAndView.addObject("allOrderList",allOrderList);
+		
+		RedirectView redirectView = new RedirectView("/show_order_placed");
 		modelAndView.setView(redirectView);
 		return modelAndView;
 	}

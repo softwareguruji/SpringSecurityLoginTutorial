@@ -23,7 +23,7 @@ public class FixedMenuItems {
 	@Column(name="fixed_menu_item_id", columnDefinition="int(11)")
 	private long fixedMenuItemsId;
 	
-	@Column(name="fixed_menu_description")
+	@Column(name="fixed_menu_description", columnDefinition="varchar(1000)")
 	private String fixedMenuDescription;
 	
 	@Column(name = "fixed_menu_item_price", columnDefinition="Decimal(10,2) default '0.00'")

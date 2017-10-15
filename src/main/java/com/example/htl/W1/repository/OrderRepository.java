@@ -10,4 +10,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long>{
 
 	List<Order> findByUserAndOrderStatus(User user, OrderStatus orderStatus);
+	List<Order> findByUserAndOrderStatusIsNotIn(User user, List<OrderStatus> orderStatus);
 }

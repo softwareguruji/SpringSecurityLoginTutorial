@@ -25,7 +25,7 @@ public class CustomMenuItem {
 	@Column(name="custom_menu_item_id", columnDefinition="int(11)")
 	private long customMenuItemId;
 	
-	@Column(name="custom_description")
+	@Column(name="custom_description", columnDefinition="varchar(1000)")
 	private String customizationDescription;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade={CascadeType.ALL})

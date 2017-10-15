@@ -1,5 +1,6 @@
 package com.example.htl.W1.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,31 @@ public class OrderServiceImpl implements OrderService {
 		return orderRepository.findByUserAndOrderStatus(userObj, unOrderderedOrder);
 	}
 
-
 	@Override
 	public Order saveNewOrder(Order orderObj) {
-		OrderStatus unOrderderedOrder = orderStatusService.getById(1L);
+		OrderStatus unOrderderedOrder = orderStatusService.getById(1L); //DB already filled with this ID
 		orderObj.setOrderStatus(unOrderderedOrder);
 		return orderRepository.save(orderObj);
+	}
+	
+	@Override
+	public Order savePlacedOrder(Order orderObj) {
+		OrderStatus unOrderderedOrder = orderStatusService.getById(2L); //DB already filled with this ID
+		orderObj.setOrderStatus(unOrderderedOrder);
+		return orderRepository.save(orderObj);
+	}
+
+	@Override
+	public Order getById(Long orderId) {
+		return orderRepository.findOne(orderId);
+	}
+
+	@Override
+	public List<Order> findAllOrderedCartItemsByUser(User userObj) {
+		OrderStatus unOrderderedOrder = orderStatusService.getById(1L);
+		List<OrderStatus> orderStatusList = new ArrayList<>();
+		orderStatusList.add(unOrderderedOrder);
+		return orderRepository.findByUserAndOrderStatusIsNotIn(userObj, orderStatusList);
 	}
 	
 }
