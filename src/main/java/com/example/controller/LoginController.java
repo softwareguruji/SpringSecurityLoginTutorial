@@ -48,6 +48,14 @@ public class LoginController {
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/access-denied", method = RequestMethod.GET)
+	public ModelAndView accessDenide (HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+	    modelAndView.setViewName("access-denied");
+		return modelAndView;
+	}
+	
 	@RequestMapping(value="/registration", method = RequestMethod.GET)
 	public ModelAndView registration(){
 		ModelAndView modelAndView = new ModelAndView();
