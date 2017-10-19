@@ -323,8 +323,7 @@ public class MenuCustomerController extends BaseController{
 		
 		modelAndView.addObject("allOrderList",allOrderList);
 		
-		RedirectView redirectView = new RedirectView("/show_order_placed");
-		modelAndView.setView(redirectView);
+		modelAndView.setViewName("/item_for_customer/show_order_placed");
 		return modelAndView;
 	}
 }
