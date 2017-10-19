@@ -53,5 +53,22 @@ public class OrderServiceImpl implements OrderService {
 		orderStatusList.add(unOrderderedOrder);
 		return orderRepository.findByUserAndOrderStatusIsNotIn(userObj, orderStatusList);
 	}
+
+	@Override
+	public List<Order> findAllOrders() {
+		return orderRepository.findAll();
+	}
+
+	@Override
+	public List<Order> findAllOrdersByOrderStatus(OrderStatus orderStatus) {
+		return orderRepository.findByOrderStatus(orderStatus);
+	}
+
+	@Override
+	public Order completeOrder(Order orderObj) {
+		OrderStatus unOrderderedOrder = orderStatusService.getById(5L); //DB already filled with this ID
+		orderObj.setOrderStatus(unOrderderedOrder);
+		return orderRepository.save(orderObj);
+	}
 	
 }

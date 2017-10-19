@@ -24,11 +24,13 @@ import com.example.htl.W1.model.CustomMenuItemOptions;
 import com.example.htl.W1.model.FixedMenuItems;
 import com.example.htl.W1.model.Menu;
 import com.example.htl.W1.model.Order;
+import com.example.htl.W1.model.OrderStatus;
 import com.example.htl.W1.service.BaseItemService;
 import com.example.htl.W1.service.CartItemService;
 import com.example.htl.W1.service.CustomMenuItemService;
 import com.example.htl.W1.service.FixedMenuItemService;
 import com.example.htl.W1.service.MenuService;
+import com.example.htl.W1.service.OrderStatusService;
 import com.example.model.User;
 
 @Controller
@@ -48,6 +50,9 @@ public class MenuCustomerController extends BaseController{
 
 	@Autowired
 	BaseItemService baseItemService;
+
+	@Autowired
+	OrderStatusService orderStatusService;
 	
 	@RequestMapping(value={"/", "/fixedMenuList"}, method = RequestMethod.GET)
 	public ModelAndView fixedMenuListShow(Principal principal){
@@ -313,6 +318,23 @@ public class MenuCustomerController extends BaseController{
 		return modelAndView;
 	}
 	
+	@RequestMapping(value="/admin/orderComplete", method = RequestMethod.POST)
+	public ModelAndView orderComplete(Principal principal, 
+												@ModelAttribute("orderId") String orderId, 
+												@ModelAttribute("type") String type){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if(type != null){
+			if(type.equals("COMPLETE")){
+				Order orderObj = orderService.getById(Long.parseLong(orderId));
+				orderService.completeOrder(orderObj);
+			} 
+		}
+		
+		RedirectView redirectView = new RedirectView("/admin/orderMgmt");
+		modelAndView.setView(redirectView);
+		return modelAndView;
+	}
 	
 	@RequestMapping(value="/showOrder", method = RequestMethod.GET)
 	public ModelAndView showOrder(Principal principal){
@@ -324,6 +346,28 @@ public class MenuCustomerController extends BaseController{
 		modelAndView.addObject("allOrderList",allOrderList);
 		
 		modelAndView.setViewName("/item_for_customer/show_order_placed");
+		return modelAndView;
+	}
+	
+	@RequestMapping(value="/admin/orderMgmt", method = RequestMethod.GET)
+	public ModelAndView showAdminOrder(Principal principal){
+		ModelAndView modelAndView = new ModelAndView();
+		
+		setupBaseParameter(modelAndView, principal);
+		
+		//Open Orders List
+		OrderStatus openOrderStatus = orderStatusService.getById(2L);
+		List<Order> allOpenOrderList = orderService.findAllOrdersByOrderStatus(openOrderStatus);
+		modelAndView.addObject("allOpenOrderList",allOpenOrderList);
+		
+		//Completed Orders List
+		OrderStatus completedOrderStatus = orderStatusService.getById(5L);
+		List<Order> allCompletedOrderList = orderService.findAllOrdersByOrderStatus(completedOrderStatus);
+		modelAndView.addObject("allCompletedOrderList",allCompletedOrderList);
+
+		modelAndView.addObject("activeHeaderMenu", HeaderLinks.ORDER_MGMT.getText());
+		
+		modelAndView.setViewName("/admin/show_order_admin");
 		return modelAndView;
 	}
 }

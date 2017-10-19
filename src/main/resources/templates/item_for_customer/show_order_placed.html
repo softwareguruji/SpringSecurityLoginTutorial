@@ -46,7 +46,7 @@ function cartOperation(cartItemId, type){
 			Order Status
 		</div>
 		<div class="col-md-7">
-			<a href="#">Cancel</a>
+			<a href="#" th:if="${order.orderStatus.orderStatusId == 2}">Cancel</a>
 		</div>
 	</div>
 </div>
